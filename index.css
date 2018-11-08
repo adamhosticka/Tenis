@@ -1,0 +1,113 @@
+
+
+html{
+    height: 100%;
+}
+
+body {
+    -webkit-touch-callout: none;  
+    -webkit-text-size-adjust: none;   
+    -webkit-user-select: none;                 
+    background-color:#E4E4E4;
+    background-attachment:fixed;
+    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    margin:0px;
+    padding:0px;
+    width:100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+div, a, ul, lim {
+    display: block;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+h1, h2, h3, h4, a, p  {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    color: black;
+}
+
+*:focus {
+    outline: none;
+}
+
+textarea:focus, input:focus {
+    outline: none;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    overflow: hidden;
+    /* background-image: url("http://www.baldesio.it/wpscb/wp-content/uploads/2017/03/net2.jpg");
+    background-position: center;
+    background-repeat: no-repeat; 
+    background-size: cover;  */
+}
+
+.header {
+    width: 100%;
+    height: 50px;
+    background: blue;
+    /* background-image: url("http://www.red-berry.eu/_content/galerie/tenis6.jpg") */
+}
+
+.header h1 {
+    text-align: center;
+    line-height: 50px;
+}
+
+.content {
+    width: 100%;
+    height: calc(100% - 90px);
+    padding: 20px;
+    background: lightblue;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+}
+
+th {
+    width: 100px;
+}
+
+.border_none {
+    border: 0;
+}
+
+.green {
+    background: green;
+}
+
+.red {
+    background: red;
+}
+
+.footer {
+    width: 100%;
+    height: 40px;
+    background: blue;
+}
+
+.footer h2 {
+    line-height: 40px;
+    text-align: center;
+}
