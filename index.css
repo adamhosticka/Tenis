@@ -17,6 +17,10 @@ body {
     overflow: hidden;
 }
 
+div:last-child {
+    display: none;
+}
+
 div, a, ul, lim {
     display: block;
     box-sizing: border-box;
@@ -57,6 +61,7 @@ textarea:focus, input:focus {
     width: 100%;
     height: 50px;
     background: blue;
+    position: relative;
     /* background-image: url("http://www.red-berry.eu/_content/galerie/tenis6.jpg") */
 }
 
@@ -66,11 +71,49 @@ textarea:focus, input:focus {
     font-size: 1.2em
 }
 
+.left_arrow {
+    position: absolute;
+    height: 60%;
+    top: 20%;
+    left: 0;
+    display: none;
+}
+
+.right_arrow {
+    position: absolute;
+    height: 60%;
+    top: 20%;
+    right: 0;
+}
+
 .content {
     width: 100%;
     height: calc(100% - 90px);
-    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    /* padding: 20px; */
     background: lightblue;
+}
+
+.swipe_layout_content {
+    width: 200vw;
+    height: 100%;
+    overflow: auto;
+    position: relative;
+    display: block !important;
+    /* transition: 0.5s; */
+}
+
+.swipe_layout_div {
+    width: 100vw;
+    height: 100%;
+    float: left;
+    overflow: auto;
+    display: block !important;
+}
+
+#swipe_div2 {
+    background: fuchsia;
 }
 
 table, th, td {
@@ -83,10 +126,12 @@ table, th, td {
 table {
     width: 100%;
     height: 100%;
+    table-layout: fixed;
 }
 
 .border_none {
     border: 0;
+    position: relative;
 }
 
 .green {
@@ -97,22 +142,94 @@ table {
     background: red;
 }
 
+.selected_box {
+    box-shadow: inset 0px 0px 0px 2px blue;
+}
+
+.time_column {
+    width: 20%;
+}
+
+.date_div {
+    display: block !important;
+    width: 100%;
+    height: calc(200% + 1px);
+    position: absolute;
+    padding: 0 5px;
+    top: 0px;
+    left: 0px;
+}
+
+.date_div p {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .footer {
     width: 100%;
     height: 40px;
     background: blue;
+    display: block !important;
+    position: relative;
 }
 
 .footer h2 {
     line-height: 40px;
     text-align: center;
+    transition: 0.3s;
 }
 
-div:last-child {
-    display: none;
+.footer button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    opacity: 0;
+    transition: 0.3s;
 }
 
-@media (min-width: 320px) and (max-width: 767px) {
+#cancel_button {
+    left: 0;
+}
+
+#save_button {
+    right: 0;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+    table, th, td {
+        font-size: 9px;
+    }
+
+    .header {
+        height: 35px;
+    }
+
+    .header h1 {
+        line-height: 35px;
+        font-size: 1.1em;
+    }
+
+    .content {
+        height: calc(100% - 55px);
+        padding: 0px;
+    }
+
+    .footer {
+        height: 20px;
+    }
+
+    .footer h2 {
+        line-height: 20px;
+        font-size: 9px;
+    }
+    .time_column {
+        width: 20%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) and (orientation: landscape) {
     table, th, td {
         font-size: 9px;
     }
@@ -133,10 +250,48 @@ div:last-child {
     .footer {
         height: 20px;
     }
-
+    
     .footer h2 {
         line-height: 20px;
         font-size: 9px;
+    }
+    .time_column {
+        width: 15%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) and (orientation: portrait){
+    table, th, td {
+        font-size: 13px;
+    }
+
+    .header {
+        height: 50px;
+    }
+
+    .header h1 {
+        line-height: 50px;
+        font-size: 1.8em;
+    }
+
+    .content {
+        height: calc(100% - 85px);
+        padding: 0px;
+    }
+
+    .footer {
+        height: 35px;
+    }
+    
+    .footer h2 {
+        line-height: 35px;
+        font-size: 1.2em;
+    }
+    .time_column {
+        width: 15%;
+    }
+    .footer button {
+        padding: 0 10px;
     }
 }
 
@@ -144,11 +299,74 @@ div:last-child {
     table, th, td {
         font-size: 17px;
     }
+    
+    .header {
+        height: 75px;
+    }
+    
+    .header h1 {
+        font-size: 2.5em;
+        line-height: 75px;
+    }
+
+    .content {
+        height: calc(100% - 125px);
+    }
+    
+    .footer {
+        height: 50px;
+    }
+    
+    .footer h2 {
+        font-size: 1.7em;
+        line-height: 50px;
+    }
+    .time_column {
+        width: 15%;
+    }
+    .footer button {
+        padding: 0 15px;
+        font-size: 1.3em;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .table, th, td {
+        font-size: 12px;
+    }
 }
 
 @media (min-width: 1025px) and (max-width: 1280px) {
     table, th, td {
         font-size: 20px;
+    }
+    
+    .header {
+        height: 75px;
+    }
+    
+    .header h1 {
+        font-size: 2.5em;
+        line-height: 75px;
+    }
+
+    .content {
+        height: calc(100% - 125px);
+    }
+
+    .footer {
+        height: 50px;
+    }
+
+    .footer h2 {
+        font-size: 1.7em;
+        line-height: 50px;
+    }
+    .time_column {
+        width: 15%;
+    }
+    .footer button {
+        padding: 0 20px;
     }
 }
 
@@ -156,9 +374,32 @@ div:last-child {
     table, th, td {
         font-size: 25px;
     }
+
+    .header {
+        height: 75px;
+    }
+
+    .header h1 {
+        font-size: 2.5em;
+        line-height: 75px;
+    }
+
+    .content {
+        height: calc(100% - 125px);
+    }
+
+    .footer {
+        height: 50px;
+    }
+
+    .footer h2 {
+        font-size: 1.7em;
+        line-height: 50px;
+    }
+    .time_column {
+        width: 15%;
+    }
+    .footer button {
+        padding: 0 25px;
+    }
 }
-
-
-/* @media (min-width: 481px) and (max-width: 767px) {
-    
-} */

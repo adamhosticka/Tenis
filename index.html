@@ -1,377 +1,792 @@
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
 
-  <title>The HTML5 Herald</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
- <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-  <link rel="stylesheet" href="index.css">
+    <title>The HTML5 Herald</title>
+<!--     <meta name="description" content="The HTML5 Herald">
+    <meta name="author" content="SitePoint"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    <link rel="stylesheet" href="index.css">
 
 </head>
 
 <body>
     <div class="container">
         <div class="header">
+            <img id="left_arrow" class="left_arrow" src="left_arrow.png">
+            <img id="right_arrow" class="right_arrow" src="right_arrow.png">
             <h1>Tenis Klub Strakonice - Dostupnost hodin</h1>
         </div>
 
         <div class="content">
-            <table>
-                <tr>
-                    <th class="border_none"></th>
-                    <th colspan="3">Pondeli</th>
-                    <th colspan="3">Utery</th>
-                    <th colspan="3">Streda</th>
-                    <th colspan="3">Ctvrtek</th>
-                    <th colspan="3">Patek</th>
-                    <th colspan="3">Sobota</th>
-                    <th colspan="3">Nedele</th>
-                </tr>
-                <tr>
-                    <th class="border_none"></th>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                </tr>
-                <tr>
-                    <th>8:00-9:00</th>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>9:00-10:00</th>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                </tr>
-                <tr>
-                    <th>10:00-11:00</th>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>11:00-12:00</th>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>12:00-13:00</th>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>13:00-14:00</th>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>14:00-15:00</th>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>15:00-16:00</th>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>16:00-17:00</th>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>17:00-18:00</th>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                </tr>
-                <tr>
-                    <th>18:00-19:00</th>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                </tr>
-                <tr>
-                    <th>19:00-20:00</th>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                </tr>
-                <tr>
-                    <th>20:00-21:00</th>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="green"></td>
-                    <td class="red"></td>
-                    <td class="green"></td>
-                </tr>
-            </table>
+            <div id="swipe_layout_content" class="swipe_layout_content">
+                <div id="swipe_div1" class="swipe_layout_div">
+                    <table>
+                        <tr>
+                            <th class="border_none time_column">
+                                <div class="date_div">
+                                    <p id="week1"></p>
+                                </div>
+                            </th>
+                            <th colspan="3">Pondeli</th>
+                            <th colspan="3">Utery</th>
+                            <th colspan="3">Streda</th>
+                            <th colspan="3">Ctvrtek</th>
+                            <th colspan="3">Patek</th>
+                            <th colspan="3">Sobota</th>
+                            <th colspan="3">Nedele</th>
+                        </tr>
+                        <tr>
+                            <th class="border_none time_column"></th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                        </tr>
+                        <tr>
+                            <th class="time_column">8:00-9:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">9:00-10:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">10:00-11:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">11:00-12:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">12:00-13:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">13:00-14:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">14:00-15:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">15:00-16:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">16:00-17:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">17:00-18:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">18:00-19:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">19:00-20:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">20:00-21:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">21:00-22:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="swipe_div2" class="swipe_layout_div">
+                    <table>
+                        <tr>
+                            <th class="border_none time_column">
+                                <div class="date_div">
+                                    <p id="week2"></p>
+                                </div>
+                            </th>
+                            <th colspan="3">Pondeli</th>
+                            <th colspan="3">Utery</th>
+                            <th colspan="3">Streda</th>
+                            <th colspan="3">Ctvrtek</th>
+                            <th colspan="3">Patek</th>
+                            <th colspan="3">Sobota</th>
+                            <th colspan="3">Nedele</th>
+                        </tr>
+                        <tr>
+                            <th class="border_none time_column"></th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                        </tr>
+                        <tr>
+                            <th class="time_column">8:00-9:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">9:00-10:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">10:00-11:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">11:00-12:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">12:00-13:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">13:00-14:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">14:00-15:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">15:00-16:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">16:00-17:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">17:00-18:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">18:00-19:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">19:00-20:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">20:00-21:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="time_column">21:00-22:00</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div class="footer">
-            <h2>Tato stranka neslouzi k rezervaci hodin, pouze informuje o dostupnosti.</h2>
+            <button id="cancel_button">Zrušit</button>
+            <button id="save_button">Potvrdit</button>
+            <h2 id='footer_h2'>Tato stranka neslouzi k rezervaci hodin, pouze informuje o dostupnosti.</h2>
         </div>
     </div>
 </body>
-    <script src="index.js"></script>
+    <script type="text/javascript" src="index.js"></script>
 </html>

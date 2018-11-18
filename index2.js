@@ -6,7 +6,6 @@ var save = document.getElementById('save_button')
 var changed = []
 var boxes = []
 var colors = []
-var colors_booked = []
 
 function cancelChanges() {
     for(var x = 0; x < changed.length; x++) {
@@ -38,7 +37,7 @@ function saveChanges() {
 
 saveChangesToDatabase = (id, color) => {
     id++
-    axios.get('/playing_hours?id=' + id + '&color=' + color)
+    axios.get('/booked_hours?id=' + id + '&color=' + color)
     
     .then(function (response) {
         
@@ -52,7 +51,7 @@ cancel.addEventListener('click', cancelChanges)
 save.addEventListener('click', saveChanges)
 
 loadColors = () => {
-    axios.get('/load_colors')
+    axios.get('/load_colors_booked')
     
     .then(function (response) {
         var data = response.data
@@ -80,111 +79,6 @@ loadColors = () => {
 
 loadColors()
 
-loadColorsBooked = () => {
-    axios.get('/load_colors_booked')
-    
-    .then(function (response) {
-        var data = response.data
-        
-        for(box of data) {
-            colors_booked[box.id - 1] = box.color
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-}
-
-loadColorsBooked()
-
-
-
-/* var second = 1000
-var minute = second * 60
-var hour = minute * 60
-var day = hour * 24
-
-interval1()
-
-function interval1() {
-    var interval = 0;
-    var date = new Date()
-    var day1 = date.getDay()
-    var hour1 = date.getHours()
-    var minute1 = date.getMinutes()
-    var second1 = date.getSeconds()
-
-    if(day1 != 0) {
-        interval += (7-day1)*day
-    }
-
-    if(hour1 != 23) {
-        interval += (23-hour1)*hour
-    }
-
-    interval += (59-minute1)*minute
-    interval += (59-second1)*second
-
-    console.log(interval)
-
-    setTimeout(function() {
-        interval2()
-        console.log(new Date())
-        resetDB()
-        setWeeks()
-        location.reload();
-    }, interval)
-}
-
-function interval2() {
-    setInterval(function() {
-        console.log(new Date())
-        resetDB()
-        setWeeks()
-        location.reload();
-    }, day*7)
-}
-
-function resetDB() {
-    var splitter = boxes.length/2
-    for(var i = 0; i < splitter; i++) {
-        changeWeek(i+1, boxes[splitter+i].className)
-    }
-    for(var o = splitter; o < boxes.length; o++) {
-        changeWeek(o+1, colors_booked[o-splitter])
-    }
-} */
-
-changeWeek = (id, color) => {
-    axios.get('/change_week?id=' + id + '&color=' + color)
-    
-    .then(function (response) {
-        var data = response.data        
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-}
-
-function setWeeks() {
-    var d = new Date()
-    var week1 = document.getElementById('week1')
-    var week2 = document.getElementById('week2')
-    var d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 1)
-    var d2 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 7)
-    var d3 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 8)
-    var d4 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 14)
-    console.log(d1)
-    var date1_1 = d1.getDate() + "." + (d1.getMonth() + 1) + "." + d1.getFullYear()
-    var date1_2 = d2.getDate() + "." + (d2.getMonth() + 1) + "." + d2.getFullYear()
-    var date2_1 = d3.getDate() + "." + (d3.getMonth() + 1) + "." + d3.getFullYear()
-    var date2_2 = d4.getDate() + "." + (d4.getMonth() + 1) + "." + d4.getFullYear()
-
-    week1.innerHTML = date1_1 + " - " + date1_2
-    week2.innerHTML = date2_1 + " - " + date2_2
-}
-
-setWeeks()
 
 function changeColor(box, index) {
     deleted = false;
@@ -227,6 +121,7 @@ function changeColor(box, index) {
     }
 
     if(changed.length == 0) {
+        console.log(':(')
         showButtons(false)
     }
 }
@@ -250,23 +145,4 @@ function showButtons(boolean) {
         save.style.zIndex = '-1'
         save.style.opacity = '0'
     }
-}
-
-var wrapper = document.getElementById('swipe_layout_content')
-var left_arrow = document.getElementById('left_arrow')
-var right_arrow = document.getElementById('right_arrow')
-left_arrow.addEventListener('click', swipeRight)
-right_arrow.addEventListener('click', swipeLeft)
-
-
-function swipeLeft() {
-    right_arrow.style.display = 'none'
-    left_arrow.style.display = 'block'
-    wrapper.style.transform = "translateX(-100vw)"
-}
-
-function swipeRight() {
-    right_arrow.style.display = 'block'
-    left_arrow.style.display = 'none'
-    wrapper.style.transform = "translateX(0)"
 }
