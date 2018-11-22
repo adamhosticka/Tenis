@@ -1,4 +1,4 @@
-/* var mysql = require('mysql')
+var mysql = require('mysql')
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -11,7 +11,7 @@ var con = mysql.createConnection({
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-}) */
+})
 
 /* const cron = require("node-cron"); */
 const express = require("express");
