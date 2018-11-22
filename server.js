@@ -84,7 +84,7 @@ app.get('/booked_hours', function(req, res) {
     })
 })
 
-const server = app.listen(8000, function () {
+/* const server = app.listen(8000, function () {
     const host = server.address().address
     const port = server.address().port
     
@@ -93,7 +93,14 @@ const server = app.listen(8000, function () {
     checkWeek()
 
 })
+ */
 
+var PORT = process.env.PORT || 5000;
+
+var server = app.listen(PORT, function() {
+    console.log('runin')
+    checkWeek()
+})
 
 const checkWeek = () => {
     interval = 1000 * 60
