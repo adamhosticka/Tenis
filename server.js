@@ -21,6 +21,15 @@ var app = express();
 var bodyParser = require('body-parser');
 app.use(express.json());
 
+const basicAuth = require('express-basic-auth')
+
+app.use(basicAuth({
+    users: { 'newuser': 'newpass' },
+    challenge: true,
+    realm: 'false ',
+    file: ""
+}))
+
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -42,7 +51,6 @@ app.get('/load_colors', function(req, res) {
 
 app.get('/playing_hours', function(req, res) {
     const sql = "UPDATE playing_hours SET color ='" + req.query.color + "' WHERE id =" + req.query.id +";"
-    console.log(sql)
     con.query(sql, function (err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -77,8 +85,8 @@ app.get('/booked_hours', function(req, res) {
 })
 
 const server = app.listen(8000, function () {
-    var host = server.address().address
-    var port = server.address().port
+    const host = server.address().address
+    const port = server.address().port
     
     console.log("Example app listening at http://%s:%s", host, port)
 
@@ -88,7 +96,7 @@ const server = app.listen(8000, function () {
 
 
 const checkWeek = () => {
-    interval = 1000 * 60 * 100
+    interval = 1000 * 60
     // interval = 1 minute
     // get date now
     // get date now - 5 x interval
@@ -108,12 +116,15 @@ const checkWeek = () => {
     
     console.log(moment(moment().subtract(1, 'days').format()).isoWeek()) */
 
+    const numOfBoxes = 294;
+    var colorsWeek2 = []
+    var colorsBooked = []
+
     var yearNow = moment().year()
     var yearBeforeHour = moment(moment().subtract(1, 'hours').format()).year()
 
     var weekNow = moment().isoWeek()
     var weekBeforeHour = moment(moment().subtract(1, 'hours').format()).isoWeek()
-    weekNow++
 
     console.log("years: ", yearNow, " ", yearBeforeHour, "weeks: ", weekNow, " ", weekBeforeHour)
 
@@ -124,10 +135,27 @@ const checkWeek = () => {
             if (err) throw err
             console.log(results[0].isReset)
             if (results[0].isReset == 0) {
-                const sql2  = "UPDATE weeks SET isReset = 1 WHERE year = " + yearBeforeHour + " AND week = " + weekBeforeHour + "; INSERT INTO weeks (year, week) VALUES ('" + yearNow + "', '" + weekNow + "')"
+                const sql2 = "INSERT INTO weeks (year, week) VALUES ('" + yearNow + "', '" + weekNow + "'); UPDATE weeks SET isReset = 1 WHERE year = " + yearBeforeHour + " AND week = " + weekBeforeHour
                 con.query(sql2, function (err, results) {
-                    if (err) throw err
+                    if (err)  throw (err)
                     console.log(results)
+                })
+
+                const sql3  = "SELECT * FROM playing_hours; SELECT * FROM booked_hours"
+                con.query(sql3, function (err, results) {
+                    if (err) throw err
+
+                    for(var x = 0; x < numOfBoxes; x++) {
+                        colorsWeek2[x] = results[0][x+numOfBoxes].color
+                        colorsBooked[x] = results[1][x].color
+                    }
+
+                    for(var i = 0; i < numOfBoxes; i++) {
+                        const sql4 = "UPDATE playing_hours SET color = '" + colorsWeek2[i] + "' WHERE id = " + (i+1) + "; UPDATE playing_hours SET color = '" + colorsBooked[i] + "' WHERE id = " + (i+1+numOfBoxes)
+                        con.query(sql4, function (err, results) {
+                            if (err) throw err
+                        })
+                    }  
                 })
             }
         })

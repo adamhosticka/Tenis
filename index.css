@@ -17,10 +17,6 @@ body {
     overflow: hidden;
 }
 
-div:last-child {
-    display: none;
-}
-
 div, a, ul, lim {
     display: block;
     box-sizing: border-box;
@@ -62,13 +58,15 @@ textarea:focus, input:focus {
     height: 50px;
     background: blue;
     position: relative;
+    text-align: center;
     /* background-image: url("http://www.red-berry.eu/_content/galerie/tenis6.jpg") */
 }
 
 .header h1 {
     text-align: center;
     line-height: 50px;
-    font-size: 1.2em
+    font-size: 1.2em;
+    display: inline-block;
 }
 
 .left_arrow {
@@ -100,7 +98,7 @@ textarea:focus, input:focus {
     height: 100%;
     overflow: auto;
     position: relative;
-    display: block !important;
+    display: block;
     /* transition: 0.5s; */
 }
 
@@ -109,7 +107,7 @@ textarea:focus, input:focus {
     height: 100%;
     float: left;
     overflow: auto;
-    display: block !important;
+    display: block;
 }
 
 #swipe_div2 {
@@ -127,10 +125,16 @@ table {
     width: 100%;
     height: 100%;
     table-layout: fixed;
+    border: 0;
 }
 
-.border_none {
-    border: 0;
+.border_bottom_none {
+    border-bottom: 0;
+    position: relative;
+}
+
+.border_top_none {
+    border-top: 0;
     position: relative;
 }
 
@@ -151,7 +155,7 @@ table {
 }
 
 .date_div {
-    display: block !important;
+    display: block;
     width: 100%;
     height: calc(200% + 1px);
     position: absolute;
@@ -170,7 +174,7 @@ table {
     width: 100%;
     height: 40px;
     background: blue;
-    display: block !important;
+    display: block;
     position: relative;
 }
 
@@ -197,6 +201,19 @@ table {
     right: 0;
 }
 
+
+
+.display_none {
+    display: none !important;  /* nechat important */
+}
+
+.display_block {
+    display: block !important;  /* nechat important */
+}
+
+
+
+
 @media (min-width: 320px) and (max-width: 480px) {
     table, th, td {
         font-size: 9px;
@@ -208,7 +225,7 @@ table {
 
     .header h1 {
         line-height: 35px;
-        font-size: 1.1em;
+        font-size: 1em;
     }
 
     .content {
