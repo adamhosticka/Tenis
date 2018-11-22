@@ -13,7 +13,7 @@ con.connect(function(err) {
     console.log("Connected!");
 }) */
 
-const cron = require("node-cron");
+/* const cron = require("node-cron"); */
 const express = require("express");
 const fs = require("fs");
 var moment = require('moment');
