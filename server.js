@@ -1,4 +1,4 @@
-var mysql = require('mysql')
+/* var mysql = require('mysql')
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -11,7 +11,7 @@ var con = mysql.createConnection({
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-})
+}) */
 
 const cron = require("node-cron");
 const express = require("express");
@@ -40,7 +40,7 @@ app.use(express.static(__dirname));
 });
  */
 
-app.get('/load_colors', function(req, res) {
+/* app.get('/load_colors', function(req, res) {
     const sql = "SELECT * FROM playing_hours"
     console.log(sql)
     con.query(sql, function (err, results) {
@@ -82,7 +82,7 @@ app.get('/booked_hours', function(req, res) {
         if (err) throw err
         res.end(JSON.stringify(results))
     })
-})
+}) */
 
 /* const server = app.listen(8000, function () {
     const host = server.address().address
@@ -123,7 +123,7 @@ const checkWeek = () => {
     
     console.log(moment(moment().subtract(1, 'days').format()).isoWeek()) */
 
-    const numOfBoxes = 294;
+    /* const numOfBoxes = 294;
     var colorsWeek2 = []
     var colorsBooked = []
 
@@ -166,7 +166,7 @@ const checkWeek = () => {
                 })
             }
         })
-    }
+    } */
 
 
     setTimeout(() => {
