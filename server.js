@@ -40,7 +40,7 @@ app.use(express.static(__dirname));
 });
  */
 
-/* app.get('/load_colors', function(req, res) {
+app.get('/load_colors', function(req, res) {
     const sql = "SELECT * FROM playing_hours"
     console.log(sql)
     con.query(sql, function (err, results) {
@@ -82,7 +82,7 @@ app.get('/booked_hours', function(req, res) {
         if (err) throw err
         res.end(JSON.stringify(results))
     })
-}) */
+})
 
 /* const server = app.listen(8000, function () {
     const host = server.address().address
@@ -95,7 +95,7 @@ app.get('/booked_hours', function(req, res) {
 })
  */
 
-var PORT = process.env.PORT || 5000;
+var PORT = process.env.PORT || 8000;
 
 var server = app.listen(PORT, function() {
     console.log('runin')
@@ -123,7 +123,7 @@ const checkWeek = () => {
     
     console.log(moment(moment().subtract(1, 'days').format()).isoWeek()) */
 
-    /* const numOfBoxes = 294;
+    const numOfBoxes = 294;
     var colorsWeek2 = []
     var colorsBooked = []
 
@@ -166,7 +166,7 @@ const checkWeek = () => {
                 })
             }
         })
-    } */
+    }
 
 
     setTimeout(() => {
