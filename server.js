@@ -13,6 +13,19 @@ con.connect(function(err) {
     console.log("Connected!");
 }) */
 
+var con = mysql.createConnection({
+    host: "eu-cdbr-west-02.cleardb.net",
+    user: "bef10cec361e81",
+    password: "a1790973",
+    database: "heroku_8c4a2b31f479d26",
+    multipleStatements: "true"
+});
+
+con.connect(function(err) {
+    if (err) throw err
+    console.log("Connected!");
+})
+
 /* const cron = require("node-cron"); */
 const express = require("express");
 const fs = require("fs");
