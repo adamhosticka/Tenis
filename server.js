@@ -26,6 +26,26 @@ con.connect(function(err) {
     console.log("Connected!");
 })
 
+function handleDisconnect(conn) {
+    conn.on('error', function(err) {
+        if (!err.fatal) {
+            return;
+        }
+
+        if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+            throw err;
+        }
+
+        console.log('Re-connecting lost connection: ' + err.stack);
+
+        con = mysql.createConnection(conn.config);
+        handleDisconnect(con);
+        con.connect();
+    });
+}
+  
+handleDisconnect(con);
+
 /* const cron = require("node-cron"); */
 const express = require("express");
 const fs = require("fs");
@@ -39,8 +59,7 @@ const basicAuth = require('express-basic-auth')
 app.use(basicAuth({
     users: { 'newuser': 'newpass' },
     challenge: true,
-    realm: 'false ',
-    file: ""
+    realm: 'false'
 }))
 
 // Create application/x-www-form-urlencoded parser

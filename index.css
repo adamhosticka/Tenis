@@ -56,7 +56,7 @@ textarea:focus, input:focus {
 .header {
     width: 100%;
     height: 50px;
-    background: blue;
+    background: lightskyblue;
     position: relative;
     text-align: center;
     /* background-image: url("http://www.red-berry.eu/_content/galerie/tenis6.jpg") */
@@ -111,7 +111,7 @@ textarea:focus, input:focus {
 }
 
 #swipe_div2 {
-    background: fuchsia;
+    /* background: fuchsia; */
 }
 
 table, th, td {
@@ -139,11 +139,11 @@ table {
 }
 
 .green {
-    background: green;
+    background: lightgreen;
 }
 
 .red {
-    background: red;
+    background: #972219;
 }
 
 .selected_box {
@@ -173,7 +173,7 @@ table {
 .footer {
     width: 100%;
     height: 40px;
-    background: blue;
+    background: lightskyblue;
     display: block;
     position: relative;
 }
