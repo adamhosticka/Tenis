@@ -54,13 +54,48 @@ var app = express();
 var bodyParser = require('body-parser');
 app.use(express.json());
 
-const basicAuth = require('express-basic-auth')
+/* const basicAuth = require('express-basic-auth')
 
 app.use(basicAuth({
     users: { 'newuser': 'newpass' },
-    challenge: true,
-    realm: 'false'
+    challenge: true
 }))
+console.log(basicAuth(options)) */
+
+/* app.use(function(req, res, next) {
+    if ('/index_admin.html' === req.path) {
+        basicAuth.challenge = true
+        next()
+    }
+    else {
+        next()
+    }
+}); */
+
+var auth = require('http-auth')
+var basic = auth.basic({
+    /* users: { 'newuser': 'newpass' }, */
+    file: __dirname + "/user.htpasswd",
+    challenge: true
+});
+
+app.use(function(req, res, next) {
+    if ('/index_admin.html' === req.path || '/booked_hours.html' === req.path) {
+        (auth.connect(basic))(req, res, next);
+    } else {
+        next();
+    }
+});
+
+// Setup route.
+/* app.get('/', function(req, res){
+  res.send("Hello from express - " + req.user + "!");
+}); */
+
+// Setup guest route.
+/* app.get('/index_admin.html', function(req, res){
+  res.send("Hello from express - guest!");
+}); */
 
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
