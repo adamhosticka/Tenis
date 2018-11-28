@@ -2,22 +2,21 @@
 var htmlCollection = document.getElementsByTagName('td')
 var h2 = document.getElementById('footer_h2')
 var boxes = []
-var colors = []
+var values = []
 
 loadColors = () => {
     axios.get('/load_colors')
     
     .then(function (response) {
         var data = response.data
-        
         for(box of data) {
-            colors[box.id - 1] = box.color
+            values[box.id - 1] = box.val
         }
         
         for(var i = 0; i < htmlCollection.length; i++) {
             boxes[i] = htmlCollection[i]
             boxes[i].className = ""
-            boxes[i].className = colors[i]
+            boxes[i].className = values[i]
         }
     })
     .catch(function (error) {
@@ -43,10 +42,13 @@ function setWeeks() {
     var date2_1 = d3.getDate() + "." + (d3.getMonth() + 1) + "." + d3.getFullYear()
     var date2_2 = d4.getDate() + "." + (d4.getMonth() + 1) + "." + d4.getFullYear()
 
-    week1.innerHTML = date1_1 + " - " + date1_2
-    week2.innerHTML = date2_1 + " - " + date2_2
-    h1_date.innerHTML = " " + date1_1 + " - " + date1_2
-    h2_date.innerHTML = " " + date2_1 + " - " + date2_2
+    try {
+        week1.innerHTML = date1_1 + " - " + date1_2
+        week2.innerHTML = date2_1 + " - " + date2_2
+        h1_date.innerHTML = " " + date1_1 + " - " + date1_2
+        h2_date.innerHTML = " " + date2_1 + " - " + date2_2
+    }
+    catch(error) {}
 }
 
 setWeeks()

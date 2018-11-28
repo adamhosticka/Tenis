@@ -138,11 +138,11 @@ table {
     position: relative;
 }
 
-.green {
+.free {
     background: lightgreen;
 }
 
-.red {
+.booked {
     background: #972219;
 }
 
@@ -214,7 +214,7 @@ table {
 
 
 
-@media (min-width: 320px) and (max-width: 480px) {
+@media (min-width: 0px) and (max-width: 480px) {
     table, th, td {
         font-size: 9px;
     }
@@ -239,7 +239,7 @@ table {
 
     .footer h2 {
         line-height: 20px;
-        font-size: 9px;
+        font-size: 8px;
     }
     .time_column {
         width: 20%;

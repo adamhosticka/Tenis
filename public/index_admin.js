@@ -5,14 +5,14 @@ var cancel = document.getElementById('cancel_button')
 var save = document.getElementById('save_button')
 var changed = []
 var boxes = []
-var colors = []
+var values = []
 
 function cancelChanges() {
     for(var x = 0; x < changed.length; x++) {
-        if(boxes[changed[x]].className == 'red selected_box') {
-            boxes[changed[x]].className = 'green'
+        if(boxes[changed[x]].className == 'booked selected_box') {
+            boxes[changed[x]].className = 'free'
         } else {
-            boxes[changed[x]].className = 'red'
+            boxes[changed[x]].className = 'booked'
         }
         
     }
@@ -22,22 +22,22 @@ function cancelChanges() {
 
 function saveChanges() {
     for(var x = 0; x < changed.length; x++) {
-        if(boxes[changed[x]].className == 'red selected_box') {
-            boxes[changed[x]].className = 'red'
-            saveChangesToDatabase(changed[x], 'red')
+        if(boxes[changed[x]].className == 'booked selected_box') {
+            boxes[changed[x]].className = 'booked'
+            saveChangesToDatabase(changed[x], 1)
         } 
-        if(boxes[changed[x]].className == 'green selected_box') {
-            boxes[changed[x]].className = 'green'
-            saveChangesToDatabase(changed[x], 'green')
+        if(boxes[changed[x]].className == 'free selected_box') {
+            boxes[changed[x]].className = 'free'
+            saveChangesToDatabase(changed[x], 0)
         } 
     }
     changed = []
     showButtons(false)
 }
 
-saveChangesToDatabase = (id, color) => {
+saveChangesToDatabase = (id, valueID) => {
     id++
-    axios.get('/booked_hours?id=' + id + '&color=' + color)
+    axios.get('/playing_hours?id=' + id + '&valueID=' + valueID)
     
     .then(function (response) {
         
@@ -51,20 +51,25 @@ cancel.addEventListener('click', cancelChanges)
 save.addEventListener('click', saveChanges)
 
 loadColors = () => {
-    axios.get('/load_colors_booked')
+    axios.get('/load_colors')
     
     .then(function (response) {
         var data = response.data
         
-        for(box of data) {
-            colors[box.id - 1] = box.color
+        /* for(box of data) {
+            if(box.val === 'free') {
+                colors[box.id - 1] = 'green'
+            }
+            if(box.val === 'booked') {
+                colors[box.id - 1] = 'red'
+            }
         }
         
         for(var i = 0; i < htmlCollection.length; i++) {
             boxes[i] = htmlCollection[i]
             boxes[i].className = ""
             boxes[i].className = colors[i]
-        }
+        } */
 
         boxes.forEach((box, index) => {
             box.onclick = function() {
@@ -78,7 +83,6 @@ loadColors = () => {
 }
 
 loadColors()
-
 
 function changeColor(box, index) {
     deleted = false;
@@ -96,32 +100,31 @@ function changeColor(box, index) {
         changed[changed.length] = index
     }
     
-    if(box.className == "red") {
-        box.classList.remove('red')
-        box.classList.add('green')
+    if(box.className == "booked") {
+        box.classList.remove('booked')
+        box.classList.add('free')
         box.classList.add('selected_box')
     }
 
-    else if(box.className == "green") {
-        box.classList.remove('green')
-        box.classList.add('red')
+    else if(box.className == "free") {
+        box.classList.remove('free')
+        box.classList.add('booked')
         box.classList.add('selected_box')
     }
 
-    else if(box.className == "red selected_box") {
+    else if(box.className == "booked selected_box") {
         box.classList.remove('selected_box')
-        box.classList.remove('red')
-        box.classList.add('green')
+        box.classList.remove('booked')
+        box.classList.add('free')
     }
 
-    else if(box.className == "green selected_box") {
+    else if(box.className == "free selected_box") {
         box.classList.remove('selected_box')
-        box.classList.remove('green')
-        box.classList.add('red')
+        box.classList.remove('free')
+        box.classList.add('booked')
     }
 
     if(changed.length == 0) {
-        console.log(':(')
         showButtons(false)
     }
 }

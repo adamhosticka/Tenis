@@ -1,6 +1,6 @@
 var mysql = require('mysql')
 
-/* var con = mysql.createConnection({
+var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
@@ -11,9 +11,9 @@ var mysql = require('mysql')
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-}) */
+})
 
-var con = mysql.createConnection({
+/* var con = mysql.createConnection({
     host: "eu-cdbr-west-02.cleardb.net",
     user: "bef10cec361e81",
     password: "a1790973",
@@ -44,7 +44,7 @@ function handleDisconnect(conn) {
     });
 }
   
-handleDisconnect(con);
+handleDisconnect(con); */
 
 /* const cron = require("node-cron"); */
 const express = require("express");
@@ -74,13 +74,12 @@ console.log(basicAuth(options)) */
 
 var auth = require('http-auth')
 var basic = auth.basic({
-    /* users: { 'newuser': 'newpass' }, */
     file: __dirname + "/user.htpasswd",
     challenge: true
 });
 
 app.use(function(req, res, next) {
-    if ('/index_admin.html' === req.path || '/booked_hours.html' === req.path) {
+    if ('/index_admin.html' === req.path || '/booked_hours.html' === req.path || '/user.htpasswd' === req.path) {
         (auth.connect(basic))(req, res, next);
     } else {
         next();
@@ -100,7 +99,7 @@ app.use(function(req, res, next) {
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-app.use(express.static(__dirname));
+app.use(express.static('public'));
 
 /* cron.schedule("0 * * * * *", function() {
     console.log("running a task every minute");
@@ -108,7 +107,7 @@ app.use(express.static(__dirname));
  */
 
 app.get('/load_colors', function(req, res) {
-    const sql = "SELECT * FROM playing_hours"
+    const sql = "SELECT ph.id, ho.val FROM playing_hours as ph JOIN hour_options as ho ON ph.valueID = ho.id ORDER BY ph.id ASC"
     console.log(sql)
     con.query(sql, function (err, results) {
         if (err) throw err
@@ -117,16 +116,7 @@ app.get('/load_colors', function(req, res) {
 })
 
 app.get('/playing_hours', function(req, res) {
-    const sql = "UPDATE playing_hours SET color ='" + req.query.color + "' WHERE id =" + req.query.id +";"
-    con.query(sql, function (err, results) {
-        if (err) throw err
-        res.end(JSON.stringify(results))
-    })
-})
-
-app.get('/change_week', function(req, res) {
-    const sql = "UPDATE playing_hours SET color ='" + req.query.color + "' WHERE id =" + req.query.id +";"
-    console.log(sql)
+    const sql = "UPDATE playing_hours SET valueID ='" + req.query.valueID + "' WHERE id =" + req.query.id +";"
     con.query(sql, function (err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -134,7 +124,7 @@ app.get('/change_week', function(req, res) {
 })
 
 app.get('/load_colors_booked', function(req, res) {
-    const sql = "SELECT * FROM booked_hours"
+    const sql = "SELECT bh.id, ho.val FROM booked_hours as bh JOIN hour_options as ho ON bh.valueID = ho.id ORDER BY bh.id ASC"
     console.log(sql)
     con.query(sql, function (err, results) {
         if (err) throw err
@@ -143,7 +133,7 @@ app.get('/load_colors_booked', function(req, res) {
 })
 
 app.get('/booked_hours', function(req, res) {
-    const sql = "UPDATE booked_hours SET color ='" + req.query.color + "' WHERE id =" + req.query.id +";"
+    const sql = "UPDATE booked_hours SET valueID ='" + req.query.valueID + "' WHERE id =" + req.query.id +";"
     console.log(sql)
     con.query(sql, function (err, results) {
         if (err) throw err
@@ -191,8 +181,8 @@ const checkWeek = () => {
     console.log(moment(moment().subtract(1, 'days').format()).isoWeek()) */
 
     const numOfBoxes = 294;
-    var colorsWeek2 = []
-    var colorsBooked = []
+    var valuesWeek2 = []
+    var valuesBooked = []
 
     var yearNow = moment().year()
     var yearBeforeHour = moment(moment().subtract(1, 'hours').format()).year()
@@ -215,17 +205,19 @@ const checkWeek = () => {
                     console.log(results)
                 })
 
-                const sql3  = "SELECT * FROM playing_hours; SELECT * FROM booked_hours"
+                const sql3  = "SELECT * FROM playing_hours ORDER BY id ASC; SELECT * FROM booked_hours ORDER BY id ASC"
                 con.query(sql3, function (err, results) {
                     if (err) throw err
-
+                    console.log(results)
                     for(var x = 0; x < numOfBoxes; x++) {
-                        colorsWeek2[x] = results[0][x+numOfBoxes].color
-                        colorsBooked[x] = results[1][x].color
+                        valuesWeek2[x] = results[0][x+numOfBoxes].valueID
+                        valuesBooked[x] = results[1][x].valueID
                     }
+                    console.log(valuesWeek2, valuesBooked)
 
                     for(var i = 0; i < numOfBoxes; i++) {
-                        const sql4 = "UPDATE playing_hours SET color = '" + colorsWeek2[i] + "' WHERE id = " + (i+1) + "; UPDATE playing_hours SET color = '" + colorsBooked[i] + "' WHERE id = " + (i+1+numOfBoxes)
+                        const sql4 = "UPDATE playing_hours SET valueID = '" + valuesWeek2[i] + "' WHERE id = " + (i+1) + "; UPDATE playing_hours SET valueID = '" + valuesBooked[i] + "' WHERE id = " + (i+1+numOfBoxes)
+                        console.log(sql4)
                         con.query(sql4, function (err, results) {
                             if (err) throw err
                         })
