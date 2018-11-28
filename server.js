@@ -1,6 +1,6 @@
 var mysql = require('mysql')
 
-var con = mysql.createConnection({
+/* var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
@@ -11,9 +11,9 @@ var con = mysql.createConnection({
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-})
+}) */
 
-/* var con = mysql.createConnection({
+var con = mysql.createConnection({
     host: "eu-cdbr-west-02.cleardb.net",
     user: "bef10cec361e81",
     password: "a1790973",
@@ -44,33 +44,14 @@ function handleDisconnect(conn) {
     });
 }
   
-handleDisconnect(con); */
+handleDisconnect(con);
 
-/* const cron = require("node-cron"); */
 const express = require("express");
 const fs = require("fs");
 var moment = require('moment');
 var app = express();
 var bodyParser = require('body-parser');
 app.use(express.json());
-
-/* const basicAuth = require('express-basic-auth')
-
-app.use(basicAuth({
-    users: { 'newuser': 'newpass' },
-    challenge: true
-}))
-console.log(basicAuth(options)) */
-
-/* app.use(function(req, res, next) {
-    if ('/index_admin.html' === req.path) {
-        basicAuth.challenge = true
-        next()
-    }
-    else {
-        next()
-    }
-}); */
 
 var auth = require('http-auth')
 var basic = auth.basic({
