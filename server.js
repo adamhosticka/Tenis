@@ -173,7 +173,7 @@ const checkWeek = () => {
 
     console.log("years: ", yearNow, " ", yearBeforeHour, "weeks: ", weekNow, " ", weekBeforeHour)
 
-    if (weekNow !== weekBeforeHour) {
+    if (weekNow !== weekBeforeHour || yearNow !== yearBeforeHour) {
         const sql = "SELECT isReset FROM weeks WHERE year = " + yearBeforeHour + " AND week = " + weekBeforeHour + ""
         console.log(sql)
         con.query(sql, function (err, results) {
