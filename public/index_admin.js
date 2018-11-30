@@ -87,7 +87,9 @@ loadColors()
 function changeColor(box, index) {
     deleted = false;
 
-    showButtons(true)
+    if(changed.length === 0) {
+        showButtons(true)
+    }
     
     for(var x = 0; x < changed.length; x++) {
         if(changed[x] == index) {
@@ -138,11 +140,17 @@ function showButtons(boolean) {
         cancel.style.opacity = '1'
         save.style.zIndex = '1'
         save.style.opacity = '1'
+        setTimeout(function() {
+            h2.style.display = 'none'
+        }, 300)
     }
-
+    
     if(boolean == false) {
-        h2.style.opacity = '1'
-        h2.style.zIndex = '1'
+        h2.style.display = 'block'
+        setTimeout(function() {
+            h2.style.opacity = '1'
+            h2.style.zIndex = '1'
+        }, 100)
         cancel.style.zIndex = '-1'
         cancel.style.opacity = '0'
         save.style.zIndex = '-1'

@@ -168,6 +168,7 @@ table {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+    line-height: 1.3em;
 }
 
 .footer {
