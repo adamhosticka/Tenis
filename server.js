@@ -213,3 +213,8 @@ const checkWeek = () => {
         checkWeek()
     }, interval)
 }
+
+var http = require("http");
+setInterval(function() {
+    http.get("http://tkstrakonice.herokuapp.com");
+}, 900000); // every 15 minutes (900000)
