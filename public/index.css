@@ -3,9 +3,9 @@ html{
 }
 
 body {
-    -webkit-touch-callout: none;  
+    /* -webkit-touch-callout: none;  
     -webkit-text-size-adjust: none;   
-    -webkit-user-select: none;                 
+    -webkit-user-select: none;    */              
     background-color:#E4E4E4;
     background-attachment:fixed;
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
@@ -394,7 +394,7 @@ table {
 
 @media (min-width: 1281px) {
     table, th, td {
-        font-size: 25px;
+        font-size: 22px;
     }
 
     .header {
@@ -415,7 +415,7 @@ table {
     }
 
     .footer h2 {
-        font-size: 1.7em;
+        font-size: 1.6em;
         line-height: 50px;
     }
     .time_column {
