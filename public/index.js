@@ -4,7 +4,8 @@ var h2 = document.getElementById('footer_h2')
 var boxes = []
 var values = []
 
-loadColors = () => {
+function loadColors() {
+/* loadColors = () => { */
     axios.get('/load_colors')
     
     .then(function (response) {
@@ -12,6 +13,10 @@ loadColors = () => {
         for(box of data) {
             values[box.id - 1] = box.val
         }
+
+        /* for(var o = 0; o < data.length; o++) {
+            values[data[o].id - 1] = data[o].val
+        } */
         
         for(var i = 0; i < htmlCollection.length; i++) {
             boxes[i] = htmlCollection[i]
@@ -32,11 +37,22 @@ function setWeeks() {
     var week2 = document.getElementById('week2')
     var h1_date = document.getElementById('h1_date')
     var h2_date = document.getElementById('h2_date')
-    var d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 1)
-    var d2 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 7)
-    var d3 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 8)
-    var d4 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 14)
+
+    if(d.getDay() === 0) {
+        var d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 6)
+        var d2 = new Date(d.getFullYear(), d.getMonth(), d.getDate())
+        var d3 = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)
+        var d4 = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7)
+    }
+    else {
+        var d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 1)
+        var d2 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 7)
+        var d3 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 8)
+        var d4 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 14)
+    }
+
     console.log(d1)
+    console.log(d.getFullYear(), d.getMonth(), d.getDate(), d.getDay() + 1)
     var date1_1 = d1.getDate() + "." + (d1.getMonth() + 1) + "." + d1.getFullYear()
     var date1_2 = d2.getDate() + "." + (d2.getMonth() + 1) + "." + d2.getFullYear()
     var date2_1 = d3.getDate() + "." + (d3.getMonth() + 1) + "." + d3.getFullYear()

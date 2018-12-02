@@ -147,7 +147,7 @@ table {
 }
 
 .selected_box {
-    box-shadow: inset 0px 0px 0px 2px blue;
+    box-shadow: inset 0px 0px 0px 2px #3F51B5;
 }
 
 .time_column {
@@ -183,6 +183,10 @@ table {
     line-height: 40px;
     text-align: center;
     transition: 0.3s;
+}
+
+.footer a {
+    text-decoration: underline;
 }
 
 .footer button {
