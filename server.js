@@ -36,7 +36,8 @@ function handleDisconnect(conn) {
             throw err;
         }
 
-        console.log('Re-connecting lost connection: ' + err.stack);
+        /* console.log('Re-connecting lost connection: ' + err.stack); */
+        console.log('Re-connecting lost connection');
 
         con = mysql.createConnection(conn.config);
         handleDisconnect(con);
@@ -49,6 +50,7 @@ handleDisconnect(con);
 const express = require("express");
 const fs = require("fs");
 var moment = require('moment');
+var moment = require('moment-timezone');
 var app = express();
 var bodyParser = require('body-parser');
 app.use(express.json());
@@ -142,36 +144,18 @@ var server = app.listen(PORT, function() {
 
 const checkWeek = () => {
     interval = 1000 * 60
-    // interval = 1 minute
-    // get date now
-    // get date now - 5 x interval
-    // if different week -> resetDB
-    // pro praci s casem se ti muze hodit knihovna moment
-    // now = moment()
-    // now.week()
-    // now.year()
-    // pozitri = now.add(2, 'days')
-    // now.format(YYYY-MM-DD HH:mm:ss:SSS)
-    // presnydatum = moment("2018-11-16 20:00", "YYYY-MM-DD HH:mm")
-    // ukladat si nekam do nove tabulky> rok, tyden a boolean isReset true/false
-
-    /* console.log(moment(moment().format()).isoWeek())
-    console.log(moment().year())
-    console.log(moment().add(1, 'weeks').calendar())
-    
-    console.log(moment(moment().subtract(1, 'days').format()).isoWeek()) */
 
     const numOfBoxes = 294;
     var valuesWeek2 = []
     var valuesBooked = []
 
-    var yearNow = moment().year()
-    var yearBeforeHour = moment(moment().subtract(1, 'hours').format()).year()
+    var yearNow = moment().tz("Europe/Prague").year()
+    var yearBeforeHour = moment().tz("Europe/Prague").subtract(1, 'hours').year()
 
-    var weekNow = moment().isoWeek()
-    var weekBeforeHour = moment(moment().subtract(1, 'hours').format()).isoWeek()
+    var weekNow = moment.tz("Europe/Prague").isoWeek()
+    var weekBeforeHour = moment.tz("Europe/Prague").subtract(1, 'hours').isoWeek()
 
-    console.log("years: ", yearNow, " ", yearBeforeHour, "weeks: ", weekNow, " ", weekBeforeHour)
+    /* console.log("years: ", yearNow, " ", yearBeforeHour, "weeks: ", weekNow, " ", weekBeforeHour) */
 
     if (weekNow !== weekBeforeHour || yearNow !== yearBeforeHour) {
         const sql = "SELECT isReset FROM weeks WHERE year = " + yearBeforeHour + " AND week = " + weekBeforeHour + ""

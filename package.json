@@ -209,6 +209,7 @@
       "version": "2.1.21"
     },
     "moment": "^2.22.2",
+    "moment-timezone": "^0.5.23",
     "ms": {
       "integrity": "sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=",
       "resolved": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz",
