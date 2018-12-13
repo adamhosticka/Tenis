@@ -1,12 +1,14 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
 
-    <title>The HTML5 Herald</title>
+    <title>Správa týdenních hodin</title>
 <!--     <meta name="description" content="The HTML5 Herald">
     <meta name="author" content="SitePoint"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
     <link rel="stylesheet" href="index.css">
 
 </head>
@@ -25,7 +27,7 @@
             <div id="swipe_layout_content" class="swipe_layout_content">
                 <div id="swipe_div1" class="swipe_layout_div">
                     <table>
-                        <tr>
+                        <tr class="tr_header">
                             <th class="border_bottom_none time_column">
                                 <div class="date_div">
                                     <p id="week1"></p>
@@ -39,7 +41,7 @@
                             <th colspan="3">Sobota</th>
                             <th colspan="3">Neděle</th>
                         </tr>
-                        <tr>
+                        <tr id="courts" class="tr_header">
                             <th class="border_top_none time_column"></th>
                             <th>1</th>
                             <th>2</th>
@@ -403,7 +405,7 @@
                 </div>
                 <div id="swipe_div2" class="swipe_layout_div">
                     <table>
-                        <tr>
+                        <tr class="tr_header">
                             <th class="border_bottom_none time_column">
                                 <div class="date_div">
                                     <p id="week2"></p>
@@ -417,7 +419,7 @@
                             <th colspan="3">Sobota</th>
                             <th colspan="3">Neděle</th>
                         </tr>
-                        <tr>
+                        <tr id="courts2" class="tr_header">
                             <th class="border_top_none time_column"></th>
                             <th>1</th>
                             <th>2</th>
@@ -790,9 +792,14 @@
                 <h2 id='footer_h2'>Klikněte pro spravování předplacených hodin</h2>
                 <!-- <img src="booked.png"> -->
             </a>
+
+            <div id="footer_message_div" class="footer_message_div">
+                <h2 id="footer_message"></h2>
+            </div>
         </div>
     </div>
-</body>
+    
     <script type="text/javascript" src="index.js"></script>
     <script type="text/javascript" src="index_admin.js"></script>
+</body>
 </html>

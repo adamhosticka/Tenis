@@ -1,11 +1,12 @@
-
 var htmlCollection = document.getElementsByTagName('td')
 var h2 = document.getElementById('footer_h2')
 var cancel = document.getElementById('cancel_button')
 var save = document.getElementById('save_button')
+var footer_message_div = document.getElementById('footer_message_div')
+var footer_message = document.getElementById('footer_message')
 var changed = []
-var boxes = []
 var values = []
+var boxes = []
 
 function cancelChanges() {
     for(var x = 0; x < changed.length; x++) {
@@ -21,6 +22,23 @@ function cancelChanges() {
 }
 
 function saveChanges() {
+    
+    footer_message_div.style.zIndex = '1'
+    footer_message.innerHTML = ''
+    if(changed.length === 1) {
+        footer_message.innerHTML = 'Byl změněn ' + changed.length + ' záznam.'
+    }
+    else if(changed.length === 2 || changed.length === 3 || changed.length === 4) {
+        footer_message.innerHTML = 'Byly změněny ' + changed.length + ' záznamy.'
+    }
+    else {
+        footer_message.innerHTML = 'Bylo změněno ' + changed.length + ' záznamů.'
+    }
+    
+    setTimeout(function() {
+        footer_message_div.style.zIndex = '-1'
+    },1000)
+
     for(var x = 0; x < changed.length; x++) {
         if(boxes[changed[x]].className == 'booked selected_box') {
             boxes[changed[x]].className = 'booked'
@@ -35,7 +53,7 @@ function saveChanges() {
     showButtons(false)
 }
 
-saveChangesToDatabase = (id, valueID) => {
+function saveChangesToDatabase(id, valueID) {
     id++
     axios.get('/playing_hours?id=' + id + '&valueID=' + valueID)
     
@@ -50,35 +68,42 @@ saveChangesToDatabase = (id, valueID) => {
 cancel.addEventListener('click', cancelChanges)
 save.addEventListener('click', saveChanges)
 
-loadColors = () => {
+function loadColors() {
     axios.get('/load_colors')
     
     .then(function (response) {
         var data = response.data
-        
-        /* for(box of data) {
-            if(box.val === 'free') {
-                colors[box.id - 1] = 'green'
-            }
-            if(box.val === 'booked') {
-                colors[box.id - 1] = 'red'
-            }
-        }
-        
-        for(var i = 0; i < htmlCollection.length; i++) {
-            boxes[i] = htmlCollection[i]
-            boxes[i].className = ""
-            boxes[i].className = colors[i]
-        } */
 
-        boxes.forEach((box, index) => {
+        tdInRow = 21;
+        var courtsEl = document.getElementById('courts')
+        var courts = courtsEl.getElementsByTagName('th')
+        var courtsEl2 = document.getElementById('courts2')
+        var courts2 = courtsEl2.getElementsByTagName('th')
+
+        boxes.forEach(function(box, index) {
             box.onclick = function() {
                 changeColor(box, index)
+            }
+
+            /* var row = Math.floor((index+1)/tdInRow) */
+            var nbInRow = (index + 1) % (tdInRow)
+            if(nbInRow === 0) {
+                nbInRow = tdInRow
+            }
+            
+
+            box.onmouseover = function() {
+                courts[nbInRow].style.background = '#3F51B5'
+                courts2[nbInRow].style.background = '#3F51B5'
+            }
+            box.onmouseleave = function() {
+                courts[nbInRow].style.background = 'inherit'   
+                courts2[nbInRow].style.background = 'inherit'   
             }
         })
     })
     .catch(function (error) {
-        console.log(error);
+        /* console.log(error); */
     });
 }
 

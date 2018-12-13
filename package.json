@@ -16,6 +16,7 @@
       "resolved": "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz",
       "version": "1.1.1"
     },
+    "axios": "^0.18.0",
     "basic-auth": {
       "integrity": "sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==",
       "requires": {
@@ -104,6 +105,7 @@
       "resolved": "https://registry.npmjs.org/encodeurl/-/encodeurl-1.0.2.tgz",
       "version": "1.0.2"
     },
+    "es6-promise": "^4.2.5",
     "escape-html": {
       "integrity": "sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=",
       "resolved": "https://registry.npmjs.org/escape-html/-/escape-html-1.0.3.tgz",

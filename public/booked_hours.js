@@ -1,4 +1,4 @@
-saveChangesToDatabase = (id, valueID) => {
+function saveChangesToDatabase(id, valueID) {
     id++
     axios.get('/booked_hours?id=' + id + '&valueID=' + valueID)
     
@@ -10,14 +10,18 @@ saveChangesToDatabase = (id, valueID) => {
     });
 }
 
-loadColors = () => {
+function loadColors(){
     axios.get('/load_colors_booked')
     
     .then(function (response) {
         var data = response.data
         
-        for(box of data) {
+        /* for(box of data) {
             values[box.id - 1] = box.val
+        } */
+
+        for(var o = 0; o < data.length; o++) {
+            values[data[o].id - 1] = data[o].val
         }
         
         for(var i = 0; i < htmlCollection.length; i++) {
@@ -26,9 +30,25 @@ loadColors = () => {
             boxes[i].className = values[i]
         }
 
-        boxes.forEach((box, index) => {
+        tdInRow = 21;
+        var courtsEl = document.getElementById('courts')
+        var courts = courtsEl.getElementsByTagName('th')
+
+        boxes.forEach(function(box, index) {
             box.onclick = function() {
                 changeColor(box, index)
+            }
+
+            var nbInRow = (index + 1) % (tdInRow)
+            if(nbInRow === 0) {
+                nbInRow = tdInRow
+            }     
+
+            box.onmouseover = function() {
+                courts[nbInRow].style.background = '#3F51B5'
+            }
+            box.onmouseleave = function() {
+                courts[nbInRow].style.background = 'inherit'   
             }
         })
     })

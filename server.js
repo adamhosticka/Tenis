@@ -1,3 +1,4 @@
+
 var mysql = require('mysql')
 
 /* var con = mysql.createConnection({
@@ -69,29 +70,13 @@ app.use(function(req, res, next) {
     }
 });
 
-// Setup route.
-/* app.get('/', function(req, res){
-  res.send("Hello from express - " + req.user + "!");
-}); */
-
-// Setup guest route.
-/* app.get('/index_admin.html', function(req, res){
-  res.send("Hello from express - guest!");
-}); */
-
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use(express.static('public'));
 
-/* cron.schedule("0 * * * * *", function() {
-    console.log("running a task every minute");
-});
- */
-
 app.get('/load_colors', function(req, res) {
     const sql = "SELECT ph.id, ho.val FROM playing_hours as ph JOIN hour_options as ho ON ph.valueID = ho.id ORDER BY ph.id ASC"
-    console.log(sql)
     con.query(sql, function (err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -108,7 +93,6 @@ app.get('/playing_hours', function(req, res) {
 
 app.get('/load_colors_booked', function(req, res) {
     const sql = "SELECT bh.id, ho.val FROM booked_hours as bh JOIN hour_options as ho ON bh.valueID = ho.id ORDER BY bh.id ASC"
-    console.log(sql)
     con.query(sql, function (err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -117,28 +101,16 @@ app.get('/load_colors_booked', function(req, res) {
 
 app.get('/booked_hours', function(req, res) {
     const sql = "UPDATE booked_hours SET valueID ='" + req.query.valueID + "' WHERE id =" + req.query.id +";"
-    console.log(sql)
     con.query(sql, function (err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
     })
 })
 
-/* const server = app.listen(8000, function () {
-    const host = server.address().address
-    const port = server.address().port
-    
-    console.log("Example app listening at http://%s:%s", host, port)
-
-    checkWeek()
-
-})
- */
-
 var PORT = process.env.PORT || 8000;
 
 var server = app.listen(PORT, function() {
-    console.log('runin')
+    console.log('running')
     checkWeek()
 })
 

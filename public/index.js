@@ -10,19 +10,43 @@ function loadColors() {
     
     .then(function (response) {
         var data = response.data
-        for(box of data) {
+        /* for(box of data) {
             values[box.id - 1] = box.val
-        }
-
-        /* for(var o = 0; o < data.length; o++) {
-            values[data[o].id - 1] = data[o].val
         } */
+
+        for(var o = 0; o < data.length; o++) {
+            values[data[o].id - 1] = data[o].val
+        }
         
         for(var i = 0; i < htmlCollection.length; i++) {
             boxes[i] = htmlCollection[i]
             boxes[i].className = ""
             boxes[i].className = values[i]
         }
+
+        tdInRow = 21;
+        var courtsEl = document.getElementById('courts')
+        var courts = courtsEl.getElementsByTagName('th')
+        var courtsEl2 = document.getElementById('courts2')
+        var courts2 = courtsEl2.getElementsByTagName('th')
+
+        boxes.forEach(function(box, index) {
+
+            var nbInRow = (index + 1) % (tdInRow)
+            if(nbInRow === 0) {
+                nbInRow = tdInRow
+            }
+            
+
+            box.onmouseover = function() {
+                courts[nbInRow].style.background = '#3F51B5'
+                courts2[nbInRow].style.background = '#3F51B5'
+            }
+            box.onmouseleave = function() {
+                courts[nbInRow].style.background = 'inherit'   
+                courts2[nbInRow].style.background = 'inherit'   
+            }
+        })
     })
     .catch(function (error) {
         console.log(error);
@@ -51,8 +75,6 @@ function setWeeks() {
         var d4 = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay() + 14)
     }
 
-    console.log(d1)
-    console.log(d.getFullYear(), d.getMonth(), d.getDate(), d.getDay() + 1)
     var date1_1 = d1.getDate() + "." + (d1.getMonth() + 1) + "." + d1.getFullYear()
     var date1_2 = d2.getDate() + "." + (d2.getMonth() + 1) + "." + d2.getFullYear()
     var date2_1 = d3.getDate() + "." + (d3.getMonth() + 1) + "." + d3.getFullYear()
@@ -79,7 +101,7 @@ right_arrow.addEventListener('click', swipeLeft)
 function swipeLeft() {
     right_arrow.style.display = 'none'
     left_arrow.style.display = 'block'
-    wrapper.style.transform = "translateX(-100vw)"
+    wrapper.style.transform = "translateX(-50%)"
     h1_date.classList.add('display_none')
     h2_date.classList.remove('display_none')
 }
