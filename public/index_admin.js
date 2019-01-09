@@ -85,7 +85,6 @@ function loadColors() {
                 changeColor(box, index)
             }
 
-            /* var row = Math.floor((index+1)/tdInRow) */
             var nbInRow = (index + 1) % (tdInRow)
             if(nbInRow === 0) {
                 nbInRow = tdInRow

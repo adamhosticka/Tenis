@@ -11,11 +11,11 @@ function loadColors() {
     .then(function (response) {
         var data = response.data
         /* for(box of data) {
-            values[box.id - 1] = box.val
+            values[box.boxId - 1] = box.val
         } */
 
         for(var o = 0; o < data.length; o++) {
-            values[data[o].id - 1] = data[o].val
+            values[data[o].boxId - 1] = data[o].val
         }
         
         for(var i = 0; i < htmlCollection.length; i++) {

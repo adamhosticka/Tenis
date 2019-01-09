@@ -2,6 +2,11 @@ html{
     height: 100%;
 }
 
+::-webkit-scrollbar {
+    height: 0px;
+    width: 0px;
+}
+
 body {
     /* -webkit-touch-callout: none;  
     -webkit-text-size-adjust: none;   
@@ -186,6 +191,7 @@ tr:hover {
     background: lightskyblue;
     display: block;
     position: relative;
+    text-align: center;
 }
 
 .footer h2 {
@@ -196,6 +202,7 @@ tr:hover {
 
 .footer a {
     text-decoration: underline;
+    display: inline-block;
 }
 
 .footer button {
