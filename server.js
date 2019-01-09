@@ -128,6 +128,7 @@ var server = app.listen(PORT, function() {
 
     checkWeekValidity()
     checkWeek()
+    createDatabase()
 })
 
 
@@ -211,7 +212,6 @@ const checkWeekValidity = () => {
     const sql = "SELECT * FROM weeks WHERE year = " + yearNow + " AND week = " + weekNow + "; SELECT * FROM weeks WHERE year = " + yearBeforeWeek + " AND week = " + lastWeek
     con.query(sql, function (err, results) {
         if (err) throw err
-        console.log(results[1], results[0])
 
         if(results[0].length === 0) {
             console.log('zaznam pro tento tyden jeste nebyl vytvoren')
