@@ -325,7 +325,7 @@ const createDatabase = () => {
     for(var i = 0; i < numOfBoxes; i++) {
         const insert_hours = `
             INSERT INTO booked_hours (valueID)
-            VALUES (0);
+            VALUES (1);
             INSERT INTO playing_hours (valueID, year, week, boxId)
             VALUES (`+ 0 +`, `+ yearNow +`, `+ weekNow +`, `+ (i+1) +`);
             INSERT INTO playing_hours (valueID, year, week, boxId)
