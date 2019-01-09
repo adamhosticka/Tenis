@@ -21,7 +21,7 @@ function loadColors(){
         } */
 
         for(var o = 0; o < data.length; o++) {
-            values[data[o].id - 1] = data[o].val
+            values[data[o].boxId - 1] = data[o].val
         }
         
         for(var i = 0; i < htmlCollection.length; i++) {

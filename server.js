@@ -106,7 +106,7 @@ app.get('/playing_hours', function(req, res) {
 })
 
 app.get('/load_colors_booked', function(req, res) {
-    const sql = "SELECT bh.id, ho.val FROM booked_hours as bh JOIN hour_options as ho ON bh.valueID = ho.id ORDER BY bh.id ASC"
+    const sql = "SELECT bh.boxId, ho.val FROM booked_hours as bh JOIN hour_options as ho ON bh.valueID = ho.id ORDER BY bh.boxId ASC"
     con.query(sql, function (err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -114,7 +114,7 @@ app.get('/load_colors_booked', function(req, res) {
 })
 
 app.get('/booked_hours', function(req, res) {
-    const sql = "UPDATE booked_hours SET valueID ='" + req.query.valueID + "' WHERE id =" + req.query.id +";"
+    const sql = "UPDATE booked_hours SET valueID ='" + req.query.valueID + "' WHERE boxId =" + req.query.id +";"
     con.query(sql, function (err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -167,7 +167,7 @@ const checkWeek = () => {
                     WHERE year = `+ yearBeforeHour +` AND week = `+ weekBeforeHour +`
                     ORDER BY boxId ASC;
                     SELECT * FROM booked_hours
-                    ORDER BY id ASC
+                    ORDER BY boxId ASC
                 `
                 con.query(sql3, function (err, results) {
                     if (err) throw err
@@ -225,7 +225,7 @@ const checkWeekValidity = () => {
 
                 const sql3 = `
                     SELECT * FROM booked_hours
-                    ORDER BY id ASC
+                    ORDER BY boxId ASC
                 `
                 con.query(sql3, function (err, results) {
                     if (err) throw err
@@ -259,7 +259,7 @@ const checkWeekValidity = () => {
                     WHERE year = `+ yearBeforeWeek +` AND week = `+ lastWeek +`
                     ORDER BY boxId ASC;
                     SELECT * FROM booked_hours
-                    ORDER BY id ASC
+                    ORDER BY boxId ASC
                 `
                 con.query(sql3, function (err, results) {
                     if (err) throw err
@@ -306,7 +306,7 @@ const createDatabase = () => {
         DROP TABLE IF EXISTS booked_hours, playing_hours, weeks, hour_options;
         CREATE TABLE weeks (id INT AUTO_INCREMENT PRIMARY KEY, year INT(11), week INT(11), isReset TINYINT(1) DEFAULT 0);
         CREATE TABLE hour_options (id INT(11) PRIMARY KEY, val VARCHAR(255));
-        CREATE TABLE booked_hours (id INT AUTO_INCREMENT PRIMARY KEY, valueID INT(11), FOREIGN KEY (valueID) REFERENCES hour_options(id));
+        CREATE TABLE booked_hours (id INT AUTO_INCREMENT PRIMARY KEY, valueID INT(11), boxId INT(11), FOREIGN KEY (valueID) REFERENCES hour_options(id));
         CREATE TABLE playing_hours (id INT AUTO_INCREMENT PRIMARY KEY, valueID INT(11), year INT(11), week INT(11), boxId INT(11), FOREIGN KEY (valueID) REFERENCES hour_options(id));
     `
     con.query(create_tables, function (err, results) {
@@ -324,8 +324,8 @@ const createDatabase = () => {
 
     for(var i = 0; i < numOfBoxes; i++) {
         const insert_hours = `
-            INSERT INTO booked_hours (valueID)
-            VALUES (1);
+            INSERT INTO booked_hours (valueID, boxId)
+            VALUES (0, `+ (i+1) +`);
             INSERT INTO playing_hours (valueID, year, week, boxId)
             VALUES (`+ 0 +`, `+ yearNow +`, `+ weekNow +`, `+ (i+1) +`);
             INSERT INTO playing_hours (valueID, year, week, boxId)
