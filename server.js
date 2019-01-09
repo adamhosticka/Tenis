@@ -1,7 +1,7 @@
 
 var mysql = require('mysql')
 
-var con = mysql.createConnection({
+/* var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
@@ -12,9 +12,9 @@ var con = mysql.createConnection({
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-})
+}) */
 
-/* var con = mysql.createConnection({
+var con = mysql.createConnection({
     host: "eu-cdbr-west-02.cleardb.net",
     user: "bef10cec361e81",
     password: "a1790973",
@@ -25,7 +25,7 @@ con.connect(function(err) {
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-}) */
+})
 
 function handleDisconnect(conn) {
     conn.on('error', function(err) {
@@ -128,6 +128,7 @@ var server = app.listen(PORT, function() {
 
     checkWeekValidity()
     checkWeek()
+    createDatabase()
 })
 
 
@@ -211,10 +212,10 @@ const checkWeekValidity = () => {
     const sql = "SELECT * FROM weeks WHERE year = " + yearNow + " AND week = " + weekNow + "; SELECT * FROM weeks WHERE year = " + yearBeforeWeek + " AND week = " + lastWeek
     con.query(sql, function (err, results) {
         if (err) throw err
+        console.log(results[1], results[0])
 
         if(results[0].length === 0) {
             console.log('zaznam pro tento tyden jeste nebyl vytvoren')
-
             if(results[1].length === 0) {
                 console.log('zaznam pro predchozi tyden jeste nebyl vytvoren')
 
