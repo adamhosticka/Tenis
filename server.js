@@ -128,7 +128,6 @@ var server = app.listen(PORT, function() {
 
     checkWeekValidity()
     checkWeek()
-    createDatabase()
 })
 
 
