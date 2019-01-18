@@ -1,5 +1,33 @@
 
 var mysql = require('mysql')
+const express = require("express");
+const fs = require("fs");
+var moment = require('moment');
+var moment = require('moment-timezone');
+var app = express();
+var bodyParser = require('body-parser');
+var routes = require('./routes')
+var user = require('./routes/user')
+var http = require('http')
+var path = require('path');
+
+var session = require('express-session');
+app.use(session({
+  secret: 'ssda42das351sad4qqq13ads5133',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}))
+
+
+
+app.use(express.json());
+
+// Create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+app.use(express.static('public'));
+
 
 /* var con = mysql.createConnection({
     host: "localhost",
@@ -27,19 +55,53 @@ con.connect(function(err) {
     console.log("Connected!");
 })
 
+global.db = con
+
+
+var PORT = process.env.PORT || 8000;
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+            secret: 'keyboard cat',
+            resave: false,
+            saveUninitialized: true,
+            cookie: { maxAge: 60000 }
+        }))
+
+        
+app.get('/', user.home);//call for main index page
+//app.get('/signup', user.signup);//call for signup page
+//app.post('/signup', user.signup);//call for signup post 
+app.get('/login', routes.index);//call for login page
+app.post('/login', user.login);//call for login post
+app.get('/index_admin', user.index_admin);//call for dashboard page after login
+app.get('/booked_hours', user.booked_hours);//call for dashboard page after login
+app.get('/logout', user.logout);//call for logout
+
+var server = app.listen(PORT, function() {
+    console.log('running')
+    
+    checkWeekValidity()
+    checkWeek()
+})
+
 function handleDisconnect(conn) {
     conn.on('error', function(err) {
         if (!err.fatal) {
             return;
         }
-
+        
         if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
             throw err;
         }
 
         /* console.log('Re-connecting lost connection: ' + err.stack); */
         console.log('Re-connecting lost connection');
-
+        
         con = mysql.createConnection(conn.config);
         handleDisconnect(con);
         con.connect();
@@ -48,35 +110,11 @@ function handleDisconnect(conn) {
   
 handleDisconnect(con);
 
-const express = require("express");
-const fs = require("fs");
-var moment = require('moment');
-var moment = require('moment-timezone');
-var app = express();
-var bodyParser = require('body-parser');
-app.use(express.json());
 
-var auth = require('http-auth')
-var basic = auth.basic({
-    file: __dirname + "/user.htpasswd",
-    challenge: true
-});
-
-app.use(function(req, res, next) {
-    if ('/index_admin.html' === req.path || '/booked_hours.html' === req.path || '/user.htpasswd' === req.path) {
-        (auth.connect(basic))(req, res, next);
-    } else {
-        next();
-    }
-});
-
-// Create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
-
-app.use(express.static('public'));
-
-var year
+const numOfBoxes = 294;
 var week
+var year
+
 
 app.get('/load_colors', function(req, res) {
     year = moment().tz("Europe/Prague").year()
@@ -101,7 +139,8 @@ app.get('/playing_hours', function(req, res) {
     const sql = "UPDATE playing_hours SET valueID ='" + req.query.valueID + "' WHERE boxId =" + req.query.id +" AND year = " + year + " AND week = " + week
     con.query(sql, function (err, results) {
         if (err) throw err
-        res.end(JSON.stringify(results))
+        console.log(results)
+        res.end(JSON.stringify(sql))
     })
 })
 
@@ -120,22 +159,6 @@ app.get('/booked_hours', function(req, res) {
         res.end(JSON.stringify(results))
     })
 })
-
-var PORT = process.env.PORT || 8000;
-
-var server = app.listen(PORT, function() {
-    console.log('running')
-
-    checkWeekValidity()
-    checkWeek()
-})
-
-
-const numOfBoxes = 294;
-
-
-
-
 
 
 const checkWeek = () => {
@@ -302,11 +325,12 @@ const createDatabase = () => {
     var weekNow = moment().tz("Europe/Prague").isoWeek()
 
     const create_tables = `
-        DROP TABLE IF EXISTS booked_hours, playing_hours, weeks, hour_options;
+        DROP TABLE IF EXISTS booked_hours, playing_hours, weeks, hour_options, users;
         CREATE TABLE weeks (id INT AUTO_INCREMENT PRIMARY KEY, year INT(11), week INT(11), isReset TINYINT(1) DEFAULT 0);
         CREATE TABLE hour_options (id INT(11) PRIMARY KEY, val VARCHAR(255));
         CREATE TABLE booked_hours (id INT AUTO_INCREMENT PRIMARY KEY, valueID INT(11), boxId INT(11), FOREIGN KEY (valueID) REFERENCES hour_options(id));
         CREATE TABLE playing_hours (id INT AUTO_INCREMENT PRIMARY KEY, valueID INT(11), year INT(11), week INT(11), boxId INT(11), FOREIGN KEY (valueID) REFERENCES hour_options(id));
+        CREATE TABLE IF NOT EXISTS users (id int(5) NOT NULL AUTO_INCREMENT, first_name text NOT NULL, last_name text NOT NULL, mob_no int(11) NOT NULL, user_name varchar(20) NOT NULL, password varchar(15) NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
     `
     con.query(create_tables, function (err, results) {
         if (err) throw err

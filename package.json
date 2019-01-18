@@ -1,6 +1,10 @@
 {
   "requires": true,
+  "version": "1.0.0",
+  "main": "server.js",
+  "description": "",
   "lockfileVersion": 1,
+  "license": "MIT",
   "dependencies": {
     "accepts": {
       "integrity": "sha1-63d99gEXI6OxTopywIBcjoZ0a9I=",
@@ -100,6 +104,7 @@
       "resolved": "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz",
       "version": "1.1.1"
     },
+    "ejs": "^2.6.1",
     "encodeurl": {
       "integrity": "sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=",
       "resolved": "https://registry.npmjs.org/encodeurl/-/encodeurl-1.0.2.tgz",
@@ -118,6 +123,7 @@
     },
     "express": "^4.16.4",
     "express-basic-auth": "^1.1.6",
+    "express-session": "^1.15.6",
     "finalhandler": {
       "integrity": "sha512-Y1GUDo39ez4aHAw7MysnUD5JzYX+WaIj8I57kO3aEPT1fFRL4sr7mjei97FgnwhAyyzRYmQZaTHb2+9uZ1dPtg==",
       "requires": {
@@ -223,6 +229,7 @@
       "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.1.tgz",
       "version": "0.6.1"
     },
+    "nodemon": "^1.18.9",
     "on-finished": {
       "integrity": "sha1-IPEzZIGwg811M3mSoWlxqi2QaUc=",
       "requires": {
@@ -290,6 +297,7 @@
       "resolved": "http://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz",
       "version": "2.3.6"
     },
+    "req-flash": "0.0.3",
     "safe-buffer": {
       "integrity": "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==",
       "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz",
@@ -392,6 +400,5 @@
     "node",
     "heroku",
     "express"
-  ],
-  "license": "MIT"
+  ]
 }

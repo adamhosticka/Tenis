@@ -197,7 +197,7 @@ tr:hover {
 .footer h2 {
     line-height: 40px;
     text-align: center;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
 .footer a {
@@ -211,7 +211,7 @@ tr:hover {
     bottom: 0;
     z-index: -1;
     opacity: 0;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
 .footer_message_div {
@@ -231,7 +231,12 @@ tr:hover {
     right: 0;
 }
 
-
+#logout {
+    right: 0;
+    opacity: 1;
+    z-index: 0;
+    transition: 0.2;
+}
 
 .display_none {
     display: none !important;  /* nechat important */

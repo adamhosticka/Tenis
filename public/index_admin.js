@@ -2,6 +2,7 @@ var htmlCollection = document.getElementsByTagName('td')
 var h2 = document.getElementById('footer_h2')
 var cancel = document.getElementById('cancel_button')
 var save = document.getElementById('save_button')
+var logout = document.getElementById('logout')
 var footer_message_div = document.getElementById('footer_message_div')
 var footer_message = document.getElementById('footer_message')
 var changed = []
@@ -156,24 +157,34 @@ function changeColor(box, index) {
 }
 
 function showButtons(boolean) {
-
+    
     if(boolean == true) {
+        cancel.style.display = 'block'
+        save.style.display = 'block'
         h2.style.opacity = '0'
         h2.style.zIndex = '-1'
-        cancel.style.zIndex = '1'
-        cancel.style.opacity = '1'
-        save.style.zIndex = '1'
-        save.style.opacity = '1'
+        logout.style.opacity = '0'
+        logout.style.zIndex = '-1'
         setTimeout(function() {
+            cancel.style.zIndex = '1'
+            cancel.style.opacity = '1'
+            save.style.zIndex = '1'
+            save.style.opacity = '1'
             h2.style.display = 'none'
+            logout.style.display = 'none'
         }, 300)
     }
     
     if(boolean == false) {
         h2.style.display = 'block'
+        logout.style.display = 'block'
         setTimeout(function() {
             h2.style.opacity = '1'
             h2.style.zIndex = '1'
+            logout.style.opacity = '1'
+            logout.style.zIndex = '1'
+            cancel.style.display = 'none'
+            save.style.display = 'none'
         }, 100)
         cancel.style.zIndex = '-1'
         cancel.style.opacity = '0'
