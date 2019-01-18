@@ -35,7 +35,8 @@ exports.login = function(req, res){
      var name= post.user_name;
      var pass= post.password;
     
-     var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";                           
+     var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";     
+     console.log(sql)                      
      db.query(sql, function(err, results){      
         if(results.length){
            req.session.userId = results[0].id;
