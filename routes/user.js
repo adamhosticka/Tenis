@@ -44,16 +44,16 @@ exports.login = function(req, res){
      console.log(sql)                      
      db.query(sql, function(err, results){  
        console.log(results)    
-        if(results.length){
+        /* if(results.length){ */
            req.session.userId = results[0].id;
            req.session.user = results[0];
            console.log(results[0].id);
            res.redirect('/index_admin');
-        }
+        /* }
         else{
            message = 'Neplatné údaje.';
            res.render('index.ejs',{message: message});
-        }
+        } */
                 
      });
   } else {
