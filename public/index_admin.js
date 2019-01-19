@@ -56,7 +56,7 @@ function saveChanges() {
 
 function saveChangesToDatabase(id, valueID) {
     id++
-    axios.get('/playing_hours?id=' + id + '&valueID=' + valueID)
+    axios.get('/update_playing_hours?id=' + id + '&valueID=' + valueID)
     
     .then(function (response) {
         

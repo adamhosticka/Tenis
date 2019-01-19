@@ -64,7 +64,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
         
 app.get('/', user.home);//call for main index page
@@ -109,6 +108,9 @@ const numOfBoxes = 294;
 var week
 var year
 
+app.get('/update_playing_hours', user.update_playing_hours);
+app.get('/update_booked_hours', user.update_booked_hours);
+
 
 app.get('/load_colors', function(req, res) {
     year = moment().tz("Europe/Prague").year()
@@ -127,7 +129,7 @@ app.get('/load_colors', function(req, res) {
     })
 })
 
-app.get('/playing_hours', function(req, res) {
+/* app.get('/playing_hours', function(req, res) {
     year = moment().tz("Europe/Prague").year()
     week =  moment().tz("Europe/Prague").isoWeek()
     const sql = "UPDATE playing_hours SET valueID ='" + req.query.valueID + "' WHERE boxId =" + req.query.id +" AND year = " + year + " AND week = " + week
@@ -136,7 +138,7 @@ app.get('/playing_hours', function(req, res) {
         console.log(results)
         res.end(JSON.stringify(sql))
     })
-})
+}) */
 
 app.get('/load_colors_booked', function(req, res) {
     const sql = "SELECT bh.boxId, ho.val FROM booked_hours as bh JOIN hour_options as ho ON bh.valueID = ho.id ORDER BY bh.boxId ASC"
@@ -146,14 +148,14 @@ app.get('/load_colors_booked', function(req, res) {
     })
 })
 
-app.get('/booked_hours', function(req, res) {
+/* app.get('/booked_hours', function(req, res) {
     const sql = "UPDATE booked_hours SET valueID ='" + req.query.valueID + "' WHERE boxId =" + req.query.id +";"
     con.query(sql, function (err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
     })
 })
-
+ */
 
 const checkWeek = () => {
     interval = 1000 * 60
@@ -303,7 +305,7 @@ const checkWeekValidity = () => {
 
 }
 
-var http = require("http");
+
 setInterval(function() {
     http.get("http://tkstrakonice.herokuapp.com");
 }, 900000); // every 15 minutes (900000)

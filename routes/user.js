@@ -1,3 +1,8 @@
+
+var moment = require('moment');
+var moment = require('moment-timezone');
+
+
 exports.home = function(req, res) {
   res.render('main.ejs')
 }
@@ -37,7 +42,8 @@ exports.login = function(req, res){
     
      var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";     
      console.log(sql)                      
-     db.query(sql, function(err, results){      
+     db.query(sql, function(err, results){  
+       console.log(results)    
         if(results.length){
            req.session.userId = results[0].id;
            req.session.user = results[0];
@@ -74,26 +80,69 @@ exports.index_admin = function(req, res, next){
   });       
 };
 //-----------------------------------------------dashboard page functionality----------------------------------------------
-          
+
 exports.booked_hours = function(req, res, next){
-          
+  
   var user =  req.session.user,
   userId = req.session.userId;
   console.log('idecko usera='+userId);
   if(userId == null || userId == undefined){
-     res.redirect("/login");
-     return;
+    res.redirect("/login");
+    return;
   }
-
+  
   var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";
 
   db.query(sql, function(err, results){
-     res.render('booked_hours.ejs', {user:user});    
+    res.render('booked_hours.ejs', {user:user});    
   });       
 };
 //------------------------------------logout functionality----------------------------------------------
 exports.logout=function(req,res){
   req.session.destroy(function(err) {
      res.redirect("/login");
-  })
-};
+    })
+  };
+
+
+
+  //-----------------------------------------------db requests page functionality----------------------------------------------
+            
+  exports.update_playing_hours = function(req, res, next){
+  
+    var user =  req.session.user,
+    userId = req.session.userId;
+    console.log('idecko usera='+userId);
+    if(userId == null || userId == undefined){
+       res.redirect("/login");
+       return;
+    }
+  
+    year = moment().tz("Europe/Prague").year()
+    week =  moment().tz("Europe/Prague").isoWeek()
+    const sql = "UPDATE playing_hours SET valueID ='" + req.query.valueID + "' WHERE boxId =" + req.query.id +" AND year = " + year + " AND week = " + week
+    db.query(sql, function (err, results) {
+        if (err) throw err
+        console.log(results)
+        res.end(JSON.stringify(sql))
+    })
+  };
+
+  //-----------------------------------------------db requests page functionality----------------------------------------------
+            
+  exports.update_booked_hours = function(req, res, next){
+  
+    var user =  req.session.user,
+    userId = req.session.userId;
+    console.log('idecko usera='+userId);
+    if(userId == null || userId == undefined){
+       res.redirect("/login");
+       return;
+    }
+  
+    const sql = "UPDATE booked_hours SET valueID ='" + req.query.valueID + "' WHERE boxId =" + req.query.id +";"
+    db.query(sql, function (err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
+  };
