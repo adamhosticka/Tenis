@@ -72,7 +72,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(express.static('public'));
 
 
-var con = mysql.createConnection({
+/* var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
@@ -83,9 +83,9 @@ var con = mysql.createConnection({
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-})
+}) */
 
-/* var con = mysql.createConnection({
+var con = mysql.createConnection({
     host: "eu-cdbr-west-02.cleardb.net",
     user: "bef10cec361e81",
     password: "a1790973",
@@ -97,7 +97,7 @@ con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
 })
- */
+
 
 /* global.db = con */
 
