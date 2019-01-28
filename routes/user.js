@@ -1,8 +1,10 @@
 
 var moment = require('moment');
 var moment = require('moment-timezone');
-
+const bcrypt = require('bcrypt');
 var mysql = require('mysql')
+const saltRounds = 10;
+
 var db = mysql.createConnection({
   host: "eu-cdbr-west-02.cleardb.net",
   user: "bef10cec361e81",
@@ -44,20 +46,25 @@ exports.home = function(req, res) {
 exports.signup = function(req, res){
   message = '';
   if(req.method == "POST"){
-     var post  = req.body;
-     var name= post.user_name;
-     var pass= post.password;
-     var fname= post.first_name;
-     var lname= post.last_name;
-     var mob= post.mob_no;
+    var post  = req.body;
+    var name= post.user_name;
+    var pass= post.password;
+    var fname= post.first_name;
+    var lname= post.last_name;
+    var mob= post.mob_no;
 
-     var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + pass + "')";
+    bcrypt.hash(pass, saltRounds, function(err, hash) {
 
-     var query = db.query(sql, function(err, result) {
-
+      var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + hash + "')";
+      console.log(sql)
+      db.query(sql, function(err, results) {
+        console.log(results)
+  
         message = "Váš účet byl úspěšně vytvořen.";
         res.render('signup.ejs',{message: message});
-     });
+      })
+    })
+
 
   } else {
      res.render('signup');

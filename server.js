@@ -11,6 +11,49 @@ var user = require('./routes/user')
 var http = require('http')
 var path = require('path');
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const myPlaintextPassword = 'tenis178';
+/* const myPlaintextPassword = 's0/\/\P4$$w0rD'; */
+const someOtherPlaintextPassword = 'not_bacon';
+let hash1;
+let hash2;
+const text1 = 'random'
+const text2 = 'morda'
+
+bcrypt.hash(text1, saltRounds, function(err, hash) {
+    hash1 = hash;
+    bcrypt.compare(text1, hash1, function(err, res) {
+        if(res) {
+            console.log('okokok')
+        }
+    })
+})
+
+
+
+
+bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+    const sql = "INSERT INTO hesla (heslo) VALUES ('"+ hash + "')"
+    bcrypt.compare(myPlaintextPassword, hash, function(err, res) {
+        if(res) {
+            console.log('jo')
+        }
+      // res == true
+  });
+  bcrypt.compare(someOtherPlaintextPassword, hash, function(err, res) {
+      if(res) {
+          console.log('ne')
+      }
+    });
+    console.log(sql)
+    con.query(sql, function(err, results) {
+        if(err) throw err 
+        
+    })
+  });
+
+
 var session = require('express-session');
 app.use(session({
   secret: 'ssda42das351sad4qqq13ads5133',
@@ -29,7 +72,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(express.static('public'));
 
 
-/* var con = mysql.createConnection({
+var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
@@ -40,9 +83,9 @@ app.use(express.static('public'));
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-}) */
+})
 
-var con = mysql.createConnection({
+/* var con = mysql.createConnection({
     host: "eu-cdbr-west-02.cleardb.net",
     user: "bef10cec361e81",
     password: "a1790973",
@@ -54,7 +97,7 @@ con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
 })
-
+ */
 
 /* global.db = con */
 
@@ -138,27 +181,39 @@ app.post('/login', function(req, res) {
         var name= post.user_name;
         var pass= post.password;
         
-        var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";     
+        /* var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+ hash +"'"; */     
+        var sql="SELECT id, first_name, last_name, user_name, password FROM `users` WHERE `user_name`='"+name+"'";     
         console.log(sql)                      
         con.query(sql, function(err, results){  
-        console.log(results)    
+            console.log(results)    
             if(results.length){
-            req.session.userId = results[0].id;
-            req.session.user = results[0];
-            console.log(results[0].id);
-            res.redirect('/index_admin');
+
+                bcrypt.compare(pass, results[0].password, function(err, res2) {
+                    if(res2) {  
+                        req.session.userId = results[0].id;
+                        req.session.user = results[0];
+                        console.log(results[0].id);
+                        res.redirect('/index_admin');
+                    }
+                    else{
+                        message = 'Neplatné údaje.';
+                        res.render('index.ejs',{message: message});
+                    }
+                })
             }
             else{
-            message = 'Neplatné údaje.';
-            res.render('index.ejs',{message: message});
+                message = 'Neplatné údaje.';
+                res.render('index.ejs',{message: message});
             }
                     
         });
+
     } else {
         res.render('index.ejs',{message: message});
     }
       
 })
+
 
 /* app.get('/playing_hours', function(req, res) {
     year = moment().tz("Europe/Prague").year()
