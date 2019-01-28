@@ -13,46 +13,6 @@ var path = require('path');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const myPlaintextPassword = 'tenis178';
-/* const myPlaintextPassword = 's0/\/\P4$$w0rD'; */
-const someOtherPlaintextPassword = 'not_bacon';
-let hash1;
-let hash2;
-const text1 = 'random'
-const text2 = 'morda'
-
-bcrypt.hash(text1, saltRounds, function(err, hash) {
-    hash1 = hash;
-    bcrypt.compare(text1, hash1, function(err, res) {
-        if(res) {
-            console.log('okokok')
-        }
-    })
-})
-
-
-
-
-bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-    const sql = "INSERT INTO hesla (heslo) VALUES ('"+ hash + "')"
-    bcrypt.compare(myPlaintextPassword, hash, function(err, res) {
-        if(res) {
-            console.log('jo')
-        }
-      // res == true
-  });
-  bcrypt.compare(someOtherPlaintextPassword, hash, function(err, res) {
-      if(res) {
-          console.log('ne')
-      }
-    });
-    console.log(sql)
-    con.query(sql, function(err, results) {
-        if(err) throw err 
-        
-    })
-  });
-
 
 var session = require('express-session');
 app.use(session({
