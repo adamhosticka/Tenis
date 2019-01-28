@@ -2,6 +2,20 @@
 var moment = require('moment');
 var moment = require('moment-timezone');
 
+var mysql = require('mysql')
+var db = mysql.createConnection({
+  host: "eu-cdbr-west-02.cleardb.net",
+  user: "bef10cec361e81",
+  password: "a1790973",
+  database: "heroku_8c4a2b31f479d26",
+  multipleStatements: "true"
+});
+
+db.connect(function(err) {
+  if (err) throw err
+  console.log("Connected!");
+})
+
 
 exports.home = function(req, res) {
   res.render('main.ejs')

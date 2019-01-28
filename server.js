@@ -55,8 +55,8 @@ con.connect(function(err) {
     console.log("Connected!");
 })
 
-global.db = con
 
+/* global.db = con */
 
 var PORT = process.env.PORT || 8000;
 
