@@ -16,7 +16,7 @@ app.use(session({
   secret: 'ssda42das351sad4qqq13ads5133',
   resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 60000 }
+  cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }))
 
 
@@ -70,7 +70,7 @@ app.get('/', user.home);//call for main index page
 //app.get('/signup', user.signup);//call for signup page
 //app.post('/signup', user.signup);//call for signup post 
 app.get('/login', routes.index);//call for login page
-app.post('/login', user.login);//call for login post
+//app.post('/login', user.login);//call for login post
 app.get('/index_admin', user.index_admin);//call for dashboard page after login
 app.get('/booked_hours', user.booked_hours);//call for dashboard page after login
 app.get('/logout', user.logout);//call for logout
@@ -127,6 +127,37 @@ app.get('/load_colors', function(req, res) {
         if (err) throw err
         res.end(JSON.stringify(results))
     })
+})
+
+app.post('/login', function(req, res) {
+    var message = '';
+  var sess = req.session; 
+
+  if(req.method == "POST"){
+     var post  = req.body;
+     var name= post.user_name;
+     var pass= post.password;
+    
+     var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";     
+     console.log(sql)                      
+     db.query(sql, function(err, results){  
+       console.log(results)    
+        if(results.length){
+           req.session.userId = results[0].id;
+           req.session.user = results[0];
+           console.log(results[0].id);
+           res.redirect('/index_admin');
+        }
+        else{
+           message = 'Neplatné údaje.';
+           res.render('index.ejs',{message: message});
+        }
+                
+     });
+  } else {
+     res.render('index.ejs',{message: message});
+  }
+      
 })
 
 /* app.get('/playing_hours', function(req, res) {
