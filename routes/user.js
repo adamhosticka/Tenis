@@ -16,6 +16,26 @@ db.connect(function(err) {
   console.log("Connected!");
 })
 
+function handleDisconnect(conn) {
+  conn.on('error', function(err) {
+      if (!err.fatal) {
+          return;
+      }
+      
+      if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+          throw err;
+      }
+
+      /* console.log('Re-connecting lost connection: ' + err.stack); */
+      console.log('Re-connecting lost connection');
+      
+      db = mysql.createConnection(conn.config);
+      handleDisconnect(db);
+      db.connect();
+  });
+}
+
+handleDisconnect(db);
 
 exports.home = function(req, res) {
   res.render('main.ejs')
