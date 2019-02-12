@@ -31,8 +31,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use(express.static('public'));
 
-
-/* var con = mysql.createConnection({
+var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
@@ -43,9 +42,9 @@ app.use(express.static('public'));
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-}) */
+})
 
-var con = mysql.createConnection({
+/* var con = mysql.createConnection({
     host: "eu-cdbr-west-02.cleardb.net",
     user: "bef10cec361e81",
     password: "a1790973",
@@ -56,7 +55,7 @@ var con = mysql.createConnection({
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!");
-})
+}) */
 
 
 /* global.db = con */
@@ -147,7 +146,6 @@ app.post('/login', function(req, res) {
         con.query(sql, function(err, results){  
             console.log(results)    
             if(results.length){
-
                 bcrypt.compare(pass, results[0].password, function(err, res2) {
                     if(res2) {  
                         req.session.userId = results[0].id;
@@ -372,7 +370,7 @@ const createDatabase = () => {
         CREATE TABLE hour_options (id INT(11) PRIMARY KEY, val VARCHAR(255));
         CREATE TABLE booked_hours (id INT AUTO_INCREMENT PRIMARY KEY, valueID INT(11), boxId INT(11), FOREIGN KEY (valueID) REFERENCES hour_options(id));
         CREATE TABLE playing_hours (id INT AUTO_INCREMENT PRIMARY KEY, valueID INT(11), year INT(11), week INT(11), boxId INT(11), FOREIGN KEY (valueID) REFERENCES hour_options(id));
-        CREATE TABLE IF NOT EXISTS users (id int(5) NOT NULL AUTO_INCREMENT, first_name text NOT NULL, last_name text NOT NULL, mob_no int(11) NOT NULL, user_name varchar(20) NOT NULL, password varchar(15) NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+        CREATE TABLE users (id int(5) NOT NULL AUTO_INCREMENT, first_name text NOT NULL, last_name text NOT NULL, mob_no int(11) NOT NULL, user_name varchar(20) NOT NULL, password varchar(255) NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
     `
     con.query(create_tables, function (err, results) {
         if (err) throw err

@@ -6,6 +6,19 @@ var mysql = require('mysql')
 const saltRounds = 10;
 
 var db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "tenis_test2",
+  multipleStatements: "true"
+});
+
+db.connect(function(err) {
+  if (err) throw err
+  console.log("Connected!");
+})
+
+/* var db = mysql.createConnection({
   host: "eu-cdbr-west-02.cleardb.net",
   user: "bef10cec361e81",
   password: "a1790973",
@@ -16,7 +29,7 @@ var db = mysql.createConnection({
 db.connect(function(err) {
   if (err) throw err
   console.log("Connected!");
-})
+}) */
 
 function handleDisconnect(conn) {
   conn.on('error', function(err) {
@@ -75,6 +88,7 @@ exports.signup = function(req, res){
 exports.login = function(req, res){
   var message = '';
   var sess = req.session; 
+
 
   if(req.method == "POST"){
      var post  = req.body;
