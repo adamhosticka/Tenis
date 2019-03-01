@@ -57,6 +57,7 @@
       "resolved": "https://registry.npmjs.org/bytes/-/bytes-3.0.0.tgz",
       "version": "3.0.0"
     },
+    "connect-flash": "^0.1.1",
     "content-disposition": {
       "integrity": "sha1-DPaLud318r55YcOoUXjLhdunjLQ=",
       "resolved": "https://registry.npmjs.org/content-disposition/-/content-disposition-0.5.2.tgz",
@@ -124,6 +125,7 @@
     },
     "express": "^4.16.4",
     "express-basic-auth": "^1.1.6",
+    "express-flash": "0.0.2",
     "express-session": "^1.15.6",
     "finalhandler": {
       "integrity": "sha512-Y1GUDo39ez4aHAw7MysnUD5JzYX+WaIj8I57kO3aEPT1fFRL4sr7mjei97FgnwhAyyzRYmQZaTHb2+9uZ1dPtg==",

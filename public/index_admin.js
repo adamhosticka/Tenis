@@ -26,6 +26,7 @@ function saveChanges() {
     
     footer_message_div.style.zIndex = '1'
     footer_message.innerHTML = ''
+    console.log(changed)
     if(changed.length === 1) {
         footer_message.innerHTML = 'Byl změněn ' + changed.length + ' záznam.'
     }

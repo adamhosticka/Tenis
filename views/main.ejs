@@ -8,8 +8,9 @@
 <!--     <meta name="description" content="The HTML5 Herald">
     <meta name="author" content="SitePoint"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
+    <script type="text/javascript" src="axios.min.js"></script>
+    <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script> -->
     
     <link rel="stylesheet" href="index.css">
 
@@ -789,7 +790,108 @@
         <div class="footer">
             <button id="cancel_button">Zrušit</button>
             <button id="save_button">Potvrdit</button>
-            <h2 id='footer_h2'>Tato stránka pouze informuje o dostupnosti, pro rezervaci volejte +420720553919.</h2>
+            <h2 id='footer_h2'>+420720553919.</h2>
+            <button id="login" onclick="location.href='/login'">Přihlásit se</button>
+            <button id="logout" onclick="location.href='/logout'">Odhlásit se</button>
+
+            <div id="footer_message_div" class="footer_message_div">
+                <h2 id="footer_message"></h2>
+            </div>
+        </div>
+
+        <div id="dark_background" class="dark_background"></div>
+        <div id="book_court_div" class="book_court_div">
+            <h2 id="date" class="date_h2"></h2>
+            <img src="cancel.png" class="close_popup_button" id="close_book_court_button">
+            
+            <span>
+                <h3>Od:</h3>
+                <select id="select_hour_start" onchange="changeHoursEnd()">
+                    <option value="0">8:00</option>
+                    <option value="1">9:00</option>
+                    <option value="2">10:00</option>
+                    <option value="3">11:00</option>
+                    <option value="4">12:00</option>
+                    <option value="5">13:00</option>
+                    <option value="6">14:00</option>
+                    <option value="7">15:00</option>
+                    <option value="8">16:00</option>
+                    <option value="9">17:00</option>
+                    <option value="10">18:00</option>
+                    <option value="11">19:00</option>
+                    <option value="12">20:00</option>
+                    <option value="13">21:00</option>
+                    <!-- <option value="14">22:00</option> -->
+                </select>
+            </span>
+            
+            <span>
+                <h3>Do:</h3>
+                <select id="select_hour_end">
+                    <option value="0">8:00</option>
+                    <option value="1">9:00</option>
+                    <option value="2">10:00</option>
+                    <option value="3">11:00</option>
+                    <option value="4">12:00</option>
+                    <option value="5">13:00</option>
+                    <option value="6">14:00</option>
+                    <option value="7">15:00</option>
+                    <option value="8">16:00</option>
+                    <option value="9">17:00</option>
+                    <option value="10">18:00</option>
+                    <option value="11">19:00</option>
+                    <option value="12">20:00</option>
+                    <option value="13">21:00</option>
+                    <option value="14">22:00</option>
+                </select>
+            </span>
+            
+            <span>
+                <h3>Poznámka:</h3>
+                <textarea id="note" maxlength="250" rows="5"></textarea>
+            </span>
+            
+            <span>
+                <h3 id="warning">Pro zvolený čas je kurt již zarezervován!</h3>
+            </span>
+            
+            <button id="book_court_button" class="book_court_button" onclick="book_court()">Rezervovat</button>
+        </div>
+
+        <div id="details" class="details">
+            <h2 id="date_details" class="date_h2"></h2>
+            <img src="cancel.png" id="close_details_button" class="close_popup_button">
+            <span class="separate_span">
+                <h3>Id:</h3>
+                <span id="details_id"></span>
+            </span>
+            <span class="separate_span">
+                <h3>User:</h3>
+                <span id="details_user"></span>
+            </span>
+            <span class="separate_span">
+                <h3>Email:</h3>
+                <span id="details_email"></span>
+            </span>
+            <span class="separate_span">
+                <h3>Mobile number:</h3>
+                <span id="details_mob"></span>
+            </span>
+            <span class="separate_span">
+                <h3>Time:</h3>
+                <span id="details_time"></span>
+            </span>
+            <span class="separate_span">
+                <h3>Note:</h3>
+                <span id="details_note"></span>
+            </span>
+
+            <button id="cancel_reservation" class="cancel_reservation" onclick="cancel_reservation()">Zrušit rezervaci</button>
+            <button id="pay_reservation" class="pay_reservation">Zaplatit</button>
+        </div>
+
+        <div id="alert" class="alert">
+            <h3>Pro zamluvení hodiny <a href="login">se přihlaste.</a></h3>
         </div>
     </div>
 

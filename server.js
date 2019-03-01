@@ -10,18 +10,20 @@ var routes = require('./routes')
 var user = require('./routes/user')
 var http = require('http')
 var path = require('path');
+var flash = require('express-flash');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 var session = require('express-session');
 app.use(session({
-  secret: 'ssda42das351sad4qqq13ads5133',
+    secret: 'ssda42das351sad4qqq13ads5133',
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }))
 
+app.use(flash());
 
 
 app.use(express.json());
@@ -69,8 +71,8 @@ app.use(bodyParser.json());
 
         
 app.get('/', user.home);//call for main index page
-//app.get('/signup', user.signup);//call for signup page
-//app.post('/signup', user.signup);//call for signup post 
+app.get('/signup', user.signup);//call for signup page
+app.post('/signup', user.signup);//call for signup post 
 app.get('/login', routes.index);//call for login page
 //app.post('/login', user.login);//call for login post
 app.get('/index_admin', user.index_admin);//call for dashboard page after login
@@ -118,7 +120,7 @@ app.get('/load_colors', function(req, res) {
     year = moment().tz("Europe/Prague").year()
     week =  moment().tz("Europe/Prague").isoWeek()
     const sql = `
-        SELECT ph.boxId, ho.val
+        SELECT *
         FROM playing_hours as ph
         JOIN hour_options as ho 
         ON ph.valueID = ho.id 
@@ -131,17 +133,22 @@ app.get('/load_colors', function(req, res) {
     })
 })
 
+app.get('/get_user_type', function(req, res) {
+    var sess = req.session;
+    res.end(JSON.stringify(sess))
+})
+
 app.post('/login', function(req, res) {
     var message = '';
     var sess = req.session; 
 
     if(req.method == "POST"){
         var post  = req.body;
-        var name= post.user_name;
+        var email= post.email;
         var pass= post.password;
         
         /* var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+ hash +"'"; */     
-        var sql="SELECT id, first_name, last_name, user_name, password FROM `users` WHERE `user_name`='"+name+"'";     
+        var sql="SELECT id, first_name, last_name, password, type FROM `users` WHERE `email`='"+email+"'";     
         console.log(sql)                      
         con.query(sql, function(err, results){  
             console.log(results)    
@@ -149,9 +156,17 @@ app.post('/login', function(req, res) {
                 bcrypt.compare(pass, results[0].password, function(err, res2) {
                     if(res2) {  
                         req.session.userId = results[0].id;
+                        req.session.user_type = results[0].type;
                         req.session.user = results[0];
                         console.log(results[0].id);
-                        res.redirect('/index_admin');
+
+                        if(results[0].type == "admin") {
+                            res.redirect('/index_admin');
+                        } else if(results[0].type == "member") {
+                            res.redirect('/');
+                        } else {
+                            res.redirect('/');
+                        }
                     }
                     else{
                         message = 'Neplatné údaje.';
@@ -187,6 +202,89 @@ app.post('/login', function(req, res) {
 app.get('/load_colors_booked', function(req, res) {
     const sql = "SELECT bh.boxId, ho.val FROM booked_hours as bh JOIN hour_options as ho ON bh.valueID = ho.id ORDER BY bh.boxId ASC"
     con.query(sql, function (err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
+})
+
+app.get('/check_court_status', function(req, res) {
+    var yearNow = moment().tz("Europe/Prague").year()
+    var weekNow = moment().tz("Europe/Prague").isoWeek()
+    
+    var tdInRow = 21;
+
+    var indexes = []
+
+    indexes[0] = parseInt(req.query.index) + 1 + parseInt(req.query.courtId)
+    console.log(indexes[0])
+    var numOfHours = parseInt(req.query.bookHoursNum)
+    console.log(numOfHours)
+
+
+    for(var i = 1; i < numOfHours; i++) {
+        indexes[i] = indexes[0] + i*tdInRow
+    }
+    console.log(indexes)
+
+    const sql = "SELECT * FROM playing_hours WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId IN (" + indexes +  ") AND valueID = 0"           
+    /* const sql = "SELECT * FROM playing_hours WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId IN ('" + indexes[0] + "','" + indexes[1] + "','" + indexes[2] + "','" + indexes[3] + "','" + indexes[4] + "','" + indexes[5] + "','" + indexes[6] + "','" + indexes[7] + "','" + indexes[8] + "','" + indexes[9] + "','" + indexes[10] + "','" + indexes[11] + "','" + indexes[12] + "','" + indexes[13] + "') AND valueID = 0" */           
+    console.log(sql)
+
+    con.query(sql, function(err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
+})
+
+app.get('/book_court', function(req, res) {
+    var yearNow = moment().tz("Europe/Prague").year()
+    var weekNow = moment().tz("Europe/Prague").isoWeek()
+
+    var tdInRow = 21;
+
+    var indexes = []
+
+    indexes[0] = parseInt(req.query.index) + 1 + parseInt(req.query.courtId)
+    console.log(indexes[0])
+    var numOfHours = parseInt(req.query.bookHoursNum)
+    console.log(numOfHours)
+
+
+    for(var i = 1; i < numOfHours; i++) {
+        indexes[i] = indexes[0] + i*tdInRow
+    }
+    console.log(indexes)
+
+    const sql = "UPDATE playing_hours SET valueID = 1, booked_by =" + req.session.userId + ", booked_time ='" + req.query.booked_time + "', note='" + req.query.note +"', start_id=" + req.query.start_id + " WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId IN (" + indexes +  ") AND valueID = 0"
+    console.log(sql)
+    con.query(sql, function(err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
+})
+
+app.get('/hour_details', function(req, res) {
+    var yearNow = moment().tz("Europe/Prague").year()
+    
+    var weekNow = moment().tz("Europe/Prague").isoWeek()
+    const sql = "SELECT *, users.id as id2 FROM playing_hours JOIN users ON booked_by = users.id WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId = "+ req.query.id           
+    /* const sql = "SELECT * FROM playing_hours WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId IN ('" + indexes[0] + "','" + indexes[1] + "','" + indexes[2] + "','" + indexes[3] + "','" + indexes[4] + "','" + indexes[5] + "','" + indexes[6] + "','" + indexes[7] + "','" + indexes[8] + "','" + indexes[9] + "','" + indexes[10] + "','" + indexes[11] + "','" + indexes[12] + "','" + indexes[13] + "') AND valueID = 0" */           
+    console.log(sql)
+
+    con.query(sql, function(err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
+})
+
+app.get('/cancel_reservation', function(req, res) {
+    var yearNow = moment().tz("Europe/Prague").year()
+    var weekNow = moment().tz("Europe/Prague").isoWeek()
+
+    const sql = "UPDATE playing_hours SET valueID = 0, booked_by = '1', booked_time = '', note= '' WHERE year = " + yearNow + " AND week = " + weekNow + " AND start_id='" + req.query.start_id + "' AND valueID = 1"     
+    console.log(sql) 
+
+    con.query(sql, function(err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
     })

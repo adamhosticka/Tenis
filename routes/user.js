@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 var mysql = require('mysql')
 const saltRounds = 10;
 
+
 var db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -53,11 +54,28 @@ function handleDisconnect(conn) {
 handleDisconnect(db);
 
 exports.home = function(req, res) {
-  res.render('main.ejs')
+
+
+  var user =  req.session.user,
+  userId = req.session.userId;
+  user_type = req.session.user_type;
+  console.log('idecko usera='+userId);
+  
+  var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";
+
+  db.query(sql, function(err, results){
+    res.render('main.ejs', {user:user});    
+  });
 }
 //---------------------------------------------signup page call------------------------------------------------------
 exports.signup = function(req, res){
   message = '';
+  error = '';
+  keepfname = '';
+  keeplname = '';
+  keepmob = '';
+  keepemail = '';
+  keeppass = '';
   if(req.method == "POST"){
     var post  = req.body;
     var name= post.user_name;
@@ -66,18 +84,42 @@ exports.signup = function(req, res){
     var lname= post.last_name;
     var mob= post.mob_no;
 
-    bcrypt.hash(pass, saltRounds, function(err, hash) {
+    if(!name || !pass || !fname || !lname || !mob) {
+      error = "Vyplňte prosím všechna pole.";
+      keepfname = fname
+      keeplname = lname
+      keepmob = mob
+      keepemail = name
+      keeppass = pass
+      res.render('signup.ejs')
+    } else {
 
-      var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + hash + "')";
-      console.log(sql)
-      db.query(sql, function(err, results) {
-        console.log(results)
-  
-        message = "Váš účet byl úspěšně vytvořen.";
-        res.render('signup.ejs',{message: message});
+      bcrypt.hash(pass, saltRounds, function(err, hash) {
+
+        var sql = "INSERT INTO `users` (`first_name`,`last_name`,`mob_no`,`email`, `password`, `type`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + hash + "', 'member')";
+        console.log(sql)
+        db.query(sql, function(err, results) {
+          if(err) {
+            if(err.errno = 1062) {
+              console.log(err)
+              error = "Pro tento email už existuje účet.";
+              keepfname = fname
+              keeplname = lname
+              keepmob = mob
+              
+
+              res.render('signup.ejs')
+            }
+            /* throw err  */
+          } else {
+            console.log(results)
+
+            message = "Váš účet byl úspěšně vytvořen.";
+            res.render('signup.ejs',{message: message});
+          }
+        })
       })
-    })
-
+    }
 
   } else {
      res.render('signup');
@@ -122,9 +164,14 @@ exports.index_admin = function(req, res, next){
           
   var user =  req.session.user,
   userId = req.session.userId;
+  user_type = req.session.user_type;
   console.log('idecko usera='+userId);
   if(userId == null || userId == undefined){
      res.redirect("/login");
+     return;
+  }
+  if(user_type != 'admin'){
+     res.redirect("/");
      return;
   }
 
@@ -140,10 +187,15 @@ exports.booked_hours = function(req, res, next){
   
   var user =  req.session.user,
   userId = req.session.userId;
+  user_type = req.session.user_type;
   console.log('idecko usera='+userId);
   if(userId == null || userId == undefined){
-    res.redirect("/login");
-    return;
+     res.redirect("/login");
+     return;
+  }
+  if(user_type != 'admin'){
+     res.redirect("/");
+     return;
   }
   
   var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";

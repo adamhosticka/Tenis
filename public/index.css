@@ -80,6 +80,7 @@ textarea:focus, input:focus {
     top: 20%;
     left: 0;
     display: none;
+    cursor: pointer;
 }
 
 .right_arrow {
@@ -87,6 +88,7 @@ textarea:focus, input:focus {
     height: 60%;
     top: 20%;
     right: 0;
+    cursor: pointer;
 }
 
 .content {
@@ -126,6 +128,10 @@ table, th, td {
     font-size: 9px;
 }
 
+td:hover {
+    transition: 0s;
+}
+
 table {
     width: 100%;
     height: 100%;
@@ -157,6 +163,10 @@ tr:hover {
 
 .booked {
     background: #972219;
+}
+
+.booked_owner {
+    background: #e4f953
 }
 
 .selected_box {
@@ -235,7 +245,16 @@ tr:hover {
     right: 0;
     opacity: 1;
     z-index: 0;
-    transition: 0.2;
+    transition: 0.2s;
+    display: none;
+}
+
+#login {
+    right: 0;
+    opacity: 1;
+    z-index: 0;
+    transition: 0.2s;
+    display: none;
 }
 
 .display_none {
@@ -246,8 +265,169 @@ tr:hover {
     display: block !important;  /* nechat important */
 }
 
+.alert {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: none;
+    width: max-content;
+    height: max-content;
+    background: white;
+    padding: 30px 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
 
+.alert a {
+    display: inline-block;
+    color: #337ab7;
+}
 
+.dark_background {
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.book_court_div {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 40%;
+    min-width: 300px;
+    height: 300px;
+    max-height: 80%;
+    background: white;
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: 10px;
+    display: none;
+}
+
+.book_court_div h3 {
+    display: inline-block;
+}
+
+.book_court_div span {
+    display: block;
+    margin: 0 5px 10px 5px;
+}
+
+.book_court_div textarea {
+    width: 100%;
+    resize: none;
+}
+
+.date_h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.book_court_button {
+    background: lightgreen;
+    bottom: 10px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: min-content;
+    padding: 8px;
+}
+
+.close_popup_button {
+    position: absolute; 
+    top: 0;
+    right: 0;
+    margin: 10px;
+    width: 20px;
+    cursor: pointer;
+}
+
+#warning {
+    color: red;
+    display: none;
+}
+
+select option:disabled {
+    display: none;
+}
+
+/* td:hover {
+    opacity: 0.75;
+} */
+
+.free:hover {
+    opacity: 0.75;
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+}
+
+.details {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 40%;
+    min-width: 300px;
+    height: 300px;
+    max-height: 80%;
+    background: white;
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: 10px;
+    display: none;
+}
+
+.details h3 {
+    display: inline-block;
+}
+
+.separate_span {
+    display: block;
+    margin: 0 5px 10px 5px;
+}
+
+.pay_reservation {
+    background: lightgreen;
+    bottom: 10px;
+    position: absolute;
+    right: 10px;
+    padding: 8px;
+}
+
+.cancel_reservation {
+    background: red;
+    bottom: 10px;
+    position: absolute;
+    left: 10px;
+    padding: 8px;
+}
+
+.cancel_reservation_admin {
+    background: red;
+    bottom: 10px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 8px;
+    width: fit-content;
+}
 
 @media (min-width: 0px) and (max-width: 480px) {
     table, th, td {
@@ -279,6 +459,10 @@ tr:hover {
     .time_column {
         width: 20%;
     }
+
+    .book_court_div textarea {
+        height: 3em;
+    }
 }
 
 @media (min-width: 481px) and (max-width: 767px) and (orientation: landscape) {
@@ -309,6 +493,10 @@ tr:hover {
     }
     .time_column {
         width: 15%;
+    }
+
+    .book_court_div textarea {
+        height: 3em;
     }
 }
 
