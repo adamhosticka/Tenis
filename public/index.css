@@ -74,6 +74,16 @@ textarea:focus, input:focus {
     display: inline-block;
 }
 
+.header p {
+    display: inline-block;
+    color: blue;
+    text-decoration: underline;
+    right: 10%;
+    position: absolute;
+    top: 15%;
+    font-size: 1em;
+}
+
 .left_arrow {
     position: absolute;
     height: 60%;
@@ -96,8 +106,11 @@ textarea:focus, input:focus {
     height: calc(100% - 90px);
     position: relative;
     overflow: hidden;
-    /* padding: 20px; */
     background: lightblue;
+}
+
+.overflow_auto {
+    overflow: auto;
 }
 
 .swipe_layout_content {
@@ -115,6 +128,7 @@ textarea:focus, input:focus {
     float: left;
     overflow: auto;
     display: block;
+    /* position: relative; */
 }
 
 #swipe_div2 {
@@ -134,16 +148,41 @@ td:hover {
 
 table {
     width: 100%;
-    height: 100%;
     table-layout: fixed;
-    /* border: 0; */
 }
 
-tr:hover {
+.thead {
+    z-index: 1;
+    width: 50%;
+    height: 90px;
+    position: fixed;
+    background: lightblue;
+}
+
+#first_thead {
+    width: 100%;
+}
+
+.tbody {
+    border-top: 0;
+    margin-top: 90px;
+    min-height: calc(100% - 90px);
+    /* height: 110%; */
+}
+
+.tbody tr:nth-child(1) th, .tbody tr:nth-child(1) td  {
+    border-top: 0;
+}
+
+.tr_header th {
+    border-bottom: 0;
+}
+
+tr:hover th{
     background: #3F51B5;
 }
 
-.tr_header:hover {
+.tr_header:hover th {
     background: inherit;
 }
 
@@ -201,7 +240,6 @@ tr:hover {
     background: lightskyblue;
     display: block;
     position: relative;
-    text-align: center;
 }
 
 .footer h2 {
@@ -213,6 +251,10 @@ tr:hover {
 .footer a {
     text-decoration: underline;
     display: inline-block;
+}
+
+.footer div {
+    text-align: center;
 }
 
 .footer button {
@@ -231,6 +273,22 @@ tr:hover {
     z-index: -1;
     top: 0;
     background: lightskyblue;
+}
+
+.hint {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.hint p, .hint img {
+    display: inline-block;
+}
+
+.hint img {
+    height: 50%;
+    margin: 0 10px 0 15px;
+    width: unset;
 }
 
 #cancel_button {
@@ -279,6 +337,7 @@ tr:hover {
     padding: 30px 20px;
     border: 1px solid black;
     border-radius: 10px;
+    z-index: 5;
 }
 
 .alert a {
@@ -294,6 +353,7 @@ tr:hover {
     width: 100%;
     height: 100%;
     display: none;
+    z-index: 4;
 }
 
 .book_court_div {
@@ -312,6 +372,7 @@ tr:hover {
     border-radius: 15px;
     padding: 10px;
     display: none;
+    z-index: 5;
 }
 
 .book_court_div h3 {
@@ -353,6 +414,10 @@ tr:hover {
     cursor: pointer;
 }
 
+#price {
+    display: inline-block;
+}
+
 #warning {
     color: red;
     display: none;
@@ -367,7 +432,7 @@ select option:disabled {
 } */
 
 .free:hover {
-    opacity: 0.75;
+    opacity: 0.5;
     cursor: pointer;
 }
 
@@ -391,6 +456,7 @@ button {
     border-radius: 15px;
     padding: 10px;
     display: none;
+    z-index: 5;
 }
 
 .details h3 {
@@ -429,6 +495,57 @@ button {
     width: fit-content;
 }
 
+
+
+.autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: inline-block;
+}
+input {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+    padding: 10px;
+    font-size: 16px;
+}
+input[type=text] {
+    background-color: #f1f1f1;
+    width: 100%;
+}
+input[type=submit] {
+    background-color: DodgerBlue;
+    color: #fff;
+}
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+}
+.autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9; 
+}
+    .autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important; 
+    color: #ffffff; 
+}
+
+
+
+
 @media (min-width: 0px) and (max-width: 480px) {
     table, th, td {
         font-size: 9px;
@@ -443,6 +560,10 @@ button {
         font-size: 1em;
     }
 
+    .header p {
+        font-size: 0.8em;
+    }
+
     .content {
         height: calc(100% - 55px);
         padding: 0px;
@@ -453,6 +574,11 @@ button {
     }
 
     .footer h2 {
+        line-height: 20px;
+        font-size: 8px;
+    }
+
+    .footer p {
         line-height: 20px;
         font-size: 8px;
     }
@@ -491,6 +617,11 @@ button {
         line-height: 20px;
         font-size: 9px;
     }
+    
+    .footer p {
+        line-height: 20px;
+        font-size: 9px;
+    }
     .time_column {
         width: 15%;
     }
@@ -514,6 +645,11 @@ button {
         font-size: 1.8em;
     }
 
+
+    .header p {
+        font-size: 1.2em;
+    }
+
     .content {
         height: calc(100% - 85px);
         padding: 0px;
@@ -524,6 +660,11 @@ button {
     }
     
     .footer h2 {
+        line-height: 35px;
+        font-size: 1.2em;
+    }
+    
+    .footer p {
         line-height: 35px;
         font-size: 1.2em;
     }
@@ -549,6 +690,11 @@ button {
         line-height: 75px;
     }
 
+
+    .header p {
+        font-size: 1.6em;
+    }
+
     .content {
         height: calc(100% - 125px);
     }
@@ -558,7 +704,12 @@ button {
     }
     
     .footer h2 {
-        font-size: 1.7em;
+        font-size: 1.3em;
+        line-height: 50px;
+    }
+    
+    .footer p {
+        font-size: 1.3em;
         line-height: 50px;
     }
     .time_column {
@@ -590,6 +741,11 @@ button {
         line-height: 75px;
     }
 
+
+    .header p {
+        font-size: 1.8em;
+    }
+
     .content {
         height: calc(100% - 125px);
     }
@@ -599,7 +755,12 @@ button {
     }
 
     .footer h2 {
-        font-size: 1.7em;
+        font-size: 1.3em;
+        line-height: 50px;
+    }
+
+    .footer p {
+        font-size: 1.3em;
         line-height: 50px;
     }
     .time_column {
@@ -624,6 +785,11 @@ button {
         line-height: 75px;
     }
 
+
+    .header p {
+        font-size: 2em;
+    }
+
     .content {
         height: calc(100% - 125px);
     }
@@ -633,6 +799,11 @@ button {
     }
 
     .footer h2 {
+        font-size: 1.6em;
+        line-height: 50px;
+    }
+
+    .footer p {
         font-size: 1.6em;
         line-height: 50px;
     }

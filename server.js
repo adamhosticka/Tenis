@@ -83,8 +83,82 @@ var server = app.listen(PORT, function() {
     console.log('running')
     
     checkWeekValidity()
-    checkWeek()
+    /* createPH() */
+    /* test() */
 })
+
+const test = () => {
+    year = moment().tz("Europe/Prague").year()
+    week =  moment().tz("Europe/Prague").isoWeek()
+    var yearAfterWeek = moment().tz("Europe/Prague").add(7, 'days').year()
+    var nextWeek = moment().tz("Europe/Prague").add(7, 'days').isoWeek()
+
+    const sql = `
+        SELECT *, ho.val as ho_val, d.val as d_val, h.val as h_val, c.val as c_val
+        FROM playing_hours as ph
+        JOIN hour_options as ho 
+        ON ph.valueID = ho.id 
+        JOIN days as d 
+        ON ph.day = d.id 
+        JOIN hours as h 
+        ON ph.hour = h.id 
+        JOIN courts as c 
+        ON ph.court = c.id 
+        WHERE (year = `+ year +` AND week = `+ week +`)
+        OR (year = `+ yearAfterWeek +` AND week = `+ nextWeek +`)
+    `
+    con.query(sql, function (err, results) {
+        if (err) throw err
+        console.log(results)
+    })
+}
+
+
+const createPH = () => {
+    var yearNow = moment().tz("Europe/Prague").year()
+    var yearBeforeWeek = moment().tz("Europe/Prague").subtract(7, 'days').year()
+    var yearAfterWeek = moment().tz("Europe/Prague").add(7, 'days').year()
+
+    var weekNow = moment().tz("Europe/Prague").isoWeek()
+    var lastWeek = moment().tz("Europe/Prague").subtract(7, 'days').isoWeek()
+    var nextWeek = moment().tz("Europe/Prague").add(7, 'days').isoWeek()
+
+    const sql = "SELECT * FROM days; SELECT * FROM courts; SELECT * FROM hours WHERE activated = 1"
+
+    con.query(sql, function(err, results) {
+        if(err) throw err
+        console.log(results[0].length)
+
+        for(var x = 0; x < results[0].length; x++) {
+            for(var o = 0; o < results[2].length; o++) {
+                for(var i = 0; i < results[1].length; i++) {
+                    const sql2 = `
+                        INSERT INTO playing_hours (year, week, day, court, hour) 
+                        VALUES (2019, 9, ` + results[0][x].id + `, ` + results[1][i].id + `, ` + results[2][o].id + `)
+                    `
+                    con.query(sql2, function(err, results) {
+                        if(err) throw err
+                    })
+                }
+            }
+        }
+        
+        for(var x = 0; x < results[0].length; x++) {
+            for(var o = 0; o < results[2].length; o++) {
+                for(var i = 0; i < results[1].length; i++) {
+                    const sql2 = `
+                        INSERT INTO playing_hours (year, week, day, court, hour) 
+                        VALUES (2019, 10, ` + results[0][x].id + `, ` + results[1][i].id + `, ` + results[2][o].id + `)
+                    `
+
+                    con.query(sql2, function(err, results) {
+                        if(err) throw err
+                    })
+                }
+            }
+        }
+    })
+}
 
 function handleDisconnect(conn) {
     conn.on('error', function(err) {
@@ -112,20 +186,26 @@ const numOfBoxes = 294;
 var week
 var year
 
-app.get('/update_playing_hours', user.update_playing_hours);
-app.get('/update_booked_hours', user.update_booked_hours);
-
-
 app.get('/load_colors', function(req, res) {
     year = moment().tz("Europe/Prague").year()
     week =  moment().tz("Europe/Prague").isoWeek()
+    var yearAfterWeek = moment().tz("Europe/Prague").add(7, 'days').year()
+    var nextWeek = moment().tz("Europe/Prague").add(7, 'days').isoWeek()
+
     const sql = `
-        SELECT *
+        SELECT *, ho.val as ho_val, d.val as d_val, h.val as h_val, c.val as c_val
         FROM playing_hours as ph
         JOIN hour_options as ho 
         ON ph.valueID = ho.id 
-        WHERE year = `+ year +` AND week = `+ week +`
-        ORDER BY ph.boxId ASC
+        JOIN days as d 
+        ON ph.day = d.id 
+        JOIN hours as h 
+        ON ph.hour = h.id 
+        JOIN courts as c 
+        ON ph.court = c.id 
+        WHERE (year = `+ year +` AND week = `+ week +`)
+        OR (year = `+ yearAfterWeek +` AND week = `+ nextWeek +`) 
+        ORDER BY ph.id ASC
     `
     con.query(sql, function (err, results) {
         if (err) throw err
@@ -136,6 +216,15 @@ app.get('/load_colors', function(req, res) {
 app.get('/get_user_type', function(req, res) {
     var sess = req.session;
     res.end(JSON.stringify(sess))
+})
+
+app.get('/get_hours_courts_days', function(req, res) {
+    const sql = "SELECT * FROM hours WHERE activated = 1; SELECT * FROM courts; SELECT * FROM days"
+
+    con.query(sql, function(err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
 })
 
 app.post('/login', function(req, res) {
@@ -169,13 +258,13 @@ app.post('/login', function(req, res) {
                         }
                     }
                     else{
-                        message = 'Neplatné údaje.';
+                        message = 'Neplatné heslo.';
                         res.render('index.ejs',{message: message});
                     }
                 })
             }
             else{
-                message = 'Neplatné údaje.';
+                message = 'Neplatný email.';
                 res.render('index.ejs',{message: message});
             }
                     
@@ -187,49 +276,26 @@ app.post('/login', function(req, res) {
       
 })
 
-
-/* app.get('/playing_hours', function(req, res) {
-    year = moment().tz("Europe/Prague").year()
-    week =  moment().tz("Europe/Prague").isoWeek()
-    const sql = "UPDATE playing_hours SET valueID ='" + req.query.valueID + "' WHERE boxId =" + req.query.id +" AND year = " + year + " AND week = " + week
-    con.query(sql, function (err, results) {
-        if (err) throw err
-        console.log(results)
-        res.end(JSON.stringify(sql))
-    })
-}) */
-
-app.get('/load_colors_booked', function(req, res) {
-    const sql = "SELECT bh.boxId, ho.val FROM booked_hours as bh JOIN hour_options as ho ON bh.valueID = ho.id ORDER BY bh.boxId ASC"
-    con.query(sql, function (err, results) {
-        if (err) throw err
-        res.end(JSON.stringify(results))
-    })
-})
-
 app.get('/check_court_status', function(req, res) {
-    var yearNow = moment().tz("Europe/Prague").year()
-    var weekNow = moment().tz("Europe/Prague").isoWeek()
-    
-    var tdInRow = 21;
-
-    var indexes = []
-
-    indexes[0] = parseInt(req.query.index) + 1 + parseInt(req.query.courtId)
-    console.log(indexes[0])
-    var numOfHours = parseInt(req.query.bookHoursNum)
-    console.log(numOfHours)
-
-
-    for(var i = 1; i < numOfHours; i++) {
-        indexes[i] = indexes[0] + i*tdInRow
+    var user =  req.session.user
+    if(!user){
+       res.redirect("/login");
+       return;
     }
-    console.log(indexes)
-
-    const sql = "SELECT * FROM playing_hours WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId IN (" + indexes +  ") AND valueID = 0"           
-    /* const sql = "SELECT * FROM playing_hours WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId IN ('" + indexes[0] + "','" + indexes[1] + "','" + indexes[2] + "','" + indexes[3] + "','" + indexes[4] + "','" + indexes[5] + "','" + indexes[6] + "','" + indexes[7] + "','" + indexes[8] + "','" + indexes[9] + "','" + indexes[10] + "','" + indexes[11] + "','" + indexes[12] + "','" + indexes[13] + "') AND valueID = 0" */           
-    console.log(sql)
-
+    
+    var hours = []
+    var numOfHours = parseInt(req.query.bookHoursNum)
+    var lastDay = parseInt(req.query.dayId)
+    var lastCourt = parseInt(req.query.courtId)
+    var lastHour = parseInt(req.query.hourId)
+    var hours_ids = req.query.hoursIds.split(',')
+    
+    for(var i = 0; i < numOfHours; i++) {
+        hours[i] = hours_ids[i + lastHour]
+    }
+    
+    const sql = "SELECT * FROM playing_hours WHERE year = " + req.query.year + " AND week = " + req.query.week + " AND day = " + lastDay + " AND court = " + lastCourt + " AND hour IN (" + hours +  ") AND valueID = 0"           
+    
     con.query(sql, function(err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -237,26 +303,25 @@ app.get('/check_court_status', function(req, res) {
 })
 
 app.get('/book_court', function(req, res) {
-    var yearNow = moment().tz("Europe/Prague").year()
-    var weekNow = moment().tz("Europe/Prague").isoWeek()
-
-    var tdInRow = 21;
-
-    var indexes = []
-
-    indexes[0] = parseInt(req.query.index) + 1 + parseInt(req.query.courtId)
-    console.log(indexes[0])
-    var numOfHours = parseInt(req.query.bookHoursNum)
-    console.log(numOfHours)
-
-
-    for(var i = 1; i < numOfHours; i++) {
-        indexes[i] = indexes[0] + i*tdInRow
+    var user =  req.session.user
+    if(!user){
+       res.redirect("/login");
+       return;
     }
-    console.log(indexes)
 
-    const sql = "UPDATE playing_hours SET valueID = 1, booked_by =" + req.session.userId + ", booked_time ='" + req.query.booked_time + "', note='" + req.query.note +"', start_id=" + req.query.start_id + " WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId IN (" + indexes +  ") AND valueID = 0"
-    console.log(sql)
+    var hours = []
+    var numOfHours = parseInt(req.query.bookHoursNum)
+    var lastDay = parseInt(req.query.dayId)
+    var lastCourt = parseInt(req.query.courtId)
+    var lastHour = parseInt(req.query.hourId)
+    var hours_ids = req.query.hoursIds.split(',')
+    
+    for(var i = 0; i < numOfHours; i++) {
+        hours[i] = hours_ids[i + lastHour]
+    }
+
+    const sql = "UPDATE playing_hours SET valueID = 1, booked_by =" + req.session.userId + ", booked_time ='" + req.query.booked_time + "', note='" + req.query.note +"', start_id=" + req.query.start_id + ", length=" + numOfHours + " WHERE year = " + req.query.year + " AND week = " + req.query.week + " AND day = " + lastDay + " AND court = " + lastCourt + " AND hour IN (" + hours +  ") AND valueID = 0" 
+    
     con.query(sql, function(err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -264,13 +329,22 @@ app.get('/book_court', function(req, res) {
 })
 
 app.get('/hour_details', function(req, res) {
-    var yearNow = moment().tz("Europe/Prague").year()
+    var user =  req.session.user
+    if(!user){
+       res.redirect("/login");
+       return;
+    }
+    if(user.id != req.query.userId && user.type != 'admin'){
+       res.redirect("/");
+       return;
+    }
     
-    var weekNow = moment().tz("Europe/Prague").isoWeek()
-    const sql = "SELECT *, users.id as id2 FROM playing_hours JOIN users ON booked_by = users.id WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId = "+ req.query.id           
-    /* const sql = "SELECT * FROM playing_hours WHERE year = " + yearNow + " AND week = " + weekNow + " AND boxId IN ('" + indexes[0] + "','" + indexes[1] + "','" + indexes[2] + "','" + indexes[3] + "','" + indexes[4] + "','" + indexes[5] + "','" + indexes[6] + "','" + indexes[7] + "','" + indexes[8] + "','" + indexes[9] + "','" + indexes[10] + "','" + indexes[11] + "','" + indexes[12] + "','" + indexes[13] + "') AND valueID = 0" */           
-    console.log(sql)
-
+    var lastDay = parseInt(req.query.dayId)
+    var lastCourt = parseInt(req.query.courtId)
+    var lastHour = parseInt(req.query.hourId)
+    
+    const sql = "SELECT *, users.id as id2 FROM playing_hours JOIN users ON booked_by = users.id WHERE year = " + req.query.year + " AND week = " + req.query.week + " AND day = " + lastDay + " AND court = " + lastCourt + " AND hour=" + lastHour           
+    
     con.query(sql, function(err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
@@ -278,11 +352,141 @@ app.get('/hour_details', function(req, res) {
 })
 
 app.get('/cancel_reservation', function(req, res) {
-    var yearNow = moment().tz("Europe/Prague").year()
-    var weekNow = moment().tz("Europe/Prague").isoWeek()
+    var user =  req.session.user
+    if(!user){
+        res.redirect("/login");
+        return;
+    }
+    if(user.id != req.query.userId && user.type != 'admin'){
+       res.redirect("/");
+       return;
+    }
+    
 
-    const sql = "UPDATE playing_hours SET valueID = 0, booked_by = '1', booked_time = '', note= '' WHERE year = " + yearNow + " AND week = " + weekNow + " AND start_id='" + req.query.start_id + "' AND valueID = 1"     
-    console.log(sql) 
+    var user =  req.session.user,
+    userId = req.session.userId;
+    console.log('idecko usera='+ user);
+    if(userId == null || userId == undefined){
+       res.redirect("/login");
+       return;
+    }
+    
+    const sql = "UPDATE playing_hours SET valueID = 0, booked_by = '1', booked_time = '', note= '' WHERE year = " + req.query.year + " AND week = " + req.query.week + " AND start_id='" + req.query.start_id + "' AND valueID = 1"     
+    
+    con.query(sql, function(err, results) {
+        if (err) throw err
+        console.log('whaaat' + results)
+        res.end(JSON.stringify(results))
+    })
+})
+
+
+app.get('/load_colors_booked', function(req, res) {
+
+    var user =  req.session.user
+    if(!user){
+       res.redirect("/login");
+       return;
+    }
+    if(user.type != 'admin'){
+       res.redirect("/");
+       return;
+    }
+
+    const sql = `
+        SELECT *, ho.val as ho_val, d.val as d_val, h.val as h_val, c.val as c_val
+        FROM booked_hours as bh
+        JOIN hour_options as ho 
+        ON bh.valueID = ho.id 
+        JOIN days as d 
+        ON bh.day = d.id 
+        JOIN hours as h 
+        ON bh.hour = h.id 
+        JOIN courts as c 
+        ON bh.court = c.id 
+        ORDER BY bh.id ASC
+    `   
+    con.query(sql, function (err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
+})
+
+app.get('/check_court_status_booked', function(req, res) {
+    var user =  req.session.user
+    if(!user){
+       res.redirect("/login");
+       return;
+    }
+    if(user.type != 'admin'){
+       res.redirect("/");
+       return;
+    }
+
+    var hours = []
+    var numOfHours = parseInt(req.query.bookHoursNum)
+    var lastDay = parseInt(req.query.dayId)
+    var lastCourt = parseInt(req.query.courtId)
+    var lastHour = parseInt(req.query.hourId)
+    var hours_ids = req.query.hoursIds.split(',')
+
+    for(var i = 0; i < numOfHours; i++) {
+        hours[i] = hours_ids[i + lastHour]
+    }
+    
+    const sql = "SELECT * FROM booked_hours WHERE day = " + lastDay + " AND court = " + lastCourt + " AND hour IN (" + hours +  ") AND valueID = 0"           
+    console.log(sql)
+    con.query(sql, function(err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
+})
+
+app.get('/book_court_booked', function(req, res) {
+    var user =  req.session.user
+    if(!user){
+       res.redirect("/login");
+       return;
+    }
+    if(user.type != 'admin'){
+       res.redirect("/");
+       return;
+    }
+
+    var hours = []
+    var numOfHours = parseInt(req.query.bookHoursNum)
+    var lastDay = parseInt(req.query.dayId)
+    var lastCourt = parseInt(req.query.courtId)
+    var lastHour = parseInt(req.query.hourId)
+    var hours_ids = req.query.hoursIds.split(',')
+
+    for(var i = 0; i < numOfHours; i++) {
+        hours[i] = hours_ids[i + lastHour]
+    }
+
+    const sql = "UPDATE booked_hours SET valueID = 1, booked_by =" + req.session.userId + ", booked_time ='" + req.query.booked_time + "', note='" + req.query.note +"', start_id=" + req.query.start_id + ", length=" + numOfHours + " WHERE day = " + lastDay + " AND court = " + lastCourt + " AND hour IN (" + hours +  ") AND valueID = 0" 
+    con.query(sql, function(err, results) {
+        if (err) throw err
+        res.end(JSON.stringify(results))
+    })
+})
+
+app.get('/hour_details_booked', function(req, res) {
+    var user =  req.session.user
+    if(!user){
+       res.redirect("/login");
+       return;
+    }
+    if(user.type != 'admin'){
+       res.redirect("/");
+       return;
+    }
+
+    var lastDay = parseInt(req.query.dayId)
+    var lastCourt = parseInt(req.query.courtId)
+    var lastHour = parseInt(req.query.hourId)
+    
+    const sql = "SELECT *, users.id as id2 FROM booked_hours JOIN users ON booked_by = users.id WHERE day = " + lastDay + " AND court = " + lastCourt + " AND hour=" + lastHour           
 
     con.query(sql, function(err, results) {
         if (err) throw err
@@ -290,159 +494,95 @@ app.get('/cancel_reservation', function(req, res) {
     })
 })
 
-/* app.get('/booked_hours', function(req, res) {
-    const sql = "UPDATE booked_hours SET valueID ='" + req.query.valueID + "' WHERE boxId =" + req.query.id +";"
-    con.query(sql, function (err, results) {
+app.get('/cancel_reservation_booked', function(req, res) {
+    var user =  req.session.user
+    if(!user){
+       res.redirect("/login");
+       return;
+    }
+    if(user.type != 'admin'){
+       res.redirect("/");
+       return;
+    }
+
+    const sql = "UPDATE booked_hours SET valueID = 0, booked_by = '1', booked_time = '', note= '' WHERE start_id='" + req.query.start_id + "' AND valueID = 1"     
+
+    con.query(sql, function(err, results) {
         if (err) throw err
         res.end(JSON.stringify(results))
     })
 })
- */
 
-const checkWeek = () => {
-    interval = 1000 * 60
-
-    var valuesWeek2 = []
-    var valuesBooked = []
-
-    var yearNow = moment().tz("Europe/Prague").year()
-    var yearBeforeHour = moment().tz("Europe/Prague").subtract(1, 'hours').year()
-
-    var weekNow = moment().tz("Europe/Prague").isoWeek()
-    var weekBeforeHour = moment().tz("Europe/Prague").subtract(1, 'hours').isoWeek()
-    
-    if (weekNow !== weekBeforeHour) {
-        const sql = "SELECT isReset FROM weeks WHERE year = " + yearBeforeHour + " AND week = " + weekBeforeHour + ""
-        con.query(sql, function (err, results) {
-            if (err) throw err
-            console.log(results[0].isReset, "isReset")
-            if (results[0].isReset == 0) {
-                const sql2 = "INSERT INTO weeks (year, week) VALUES ('" + yearNow + "', '" + weekNow + "'); UPDATE weeks SET isReset = 1 WHERE year = " + yearBeforeHour + " AND week = " + weekBeforeHour
-                con.query(sql2, function (err, results) {
-                    if (err)  throw (err)
-                })
-
-                const sql3 = `
-                    SELECT * FROM playing_hours
-                    WHERE year = `+ yearBeforeHour +` AND week = `+ weekBeforeHour +`
-                    ORDER BY boxId ASC;
-                    SELECT * FROM booked_hours
-                    ORDER BY boxId ASC
-                `
-                con.query(sql3, function (err, results) {
-                    if (err) throw err
-
-                    for(var x = 0; x < numOfBoxes; x++) {
-                        valuesWeek2[x] = results[0][x+numOfBoxes].valueID
-                        valuesBooked[x] = results[1][x].valueID
-                    }
-
-                    for(var i = 0; i < numOfBoxes; i++) {
-                        const sql4 = `
-                            INSERT INTO playing_hours (valueID, year, week, boxId)
-                            VALUES (`+ valuesWeek2[i] +`, `+ yearNow +`, `+ weekNow +`, `+ (i+1) +`);
-                            INSERT INTO playing_hours (valueID, year, week, boxId)
-                            VALUES (`+ valuesBooked[i] +`, `+ yearNow +`, `+ weekNow +`, `+ (i+1+numOfBoxes) +`)
-                        `
-                        con.query(sql4, function (err, results) {
-                            if (err) throw err
-                        })
-                    }  
-                })
-            }
-        })
-    }
-
-
-    setTimeout(() => {
-        checkWeek()
-    }, interval)
-}
 
 const checkWeekValidity = () => {
     var yearNow = moment().tz("Europe/Prague").year()
     var yearBeforeWeek = moment().tz("Europe/Prague").subtract(7, 'days').year()
+    var yearAfterWeek = moment().tz("Europe/Prague").add(7, 'days').year()
 
     var weekNow = moment().tz("Europe/Prague").isoWeek()
     var lastWeek = moment().tz("Europe/Prague").subtract(7, 'days').isoWeek()
+    var nextWeek = moment().tz("Europe/Prague").add(7, 'days').isoWeek()
     
     var valuesWeek2 = []
     var valuesBooked = []
 
-    const sql = "SELECT * FROM weeks WHERE year = " + yearNow + " AND week = " + weekNow + "; SELECT * FROM weeks WHERE year = " + yearBeforeWeek + " AND week = " + lastWeek
+    const sql = "SELECT * FROM weeks WHERE year = " + yearNow + " AND week = " + weekNow + "; SELECT * FROM weeks WHERE year = " + yearAfterWeek + " AND week = " + nextWeek
     con.query(sql, function (err, results) {
         if (err) throw err
 
-        if(results[0].length === 0) {
-            console.log('zaznam pro tento tyden jeste nebyl vytvoren')
-            if(results[1].length === 0) {
-                console.log('zaznam pro predchozi tyden jeste nebyl vytvoren')
+        if(results[0].length == 0) {
 
-                const sql2 = "INSERT INTO weeks (year, week, isReset) VALUES ('" + yearBeforeWeek + "', '" + lastWeek + "', '1'); INSERT INTO weeks (year, week) VALUES ('" + yearNow + "', '" + weekNow + "')"
-                con.query(sql2, function (err, results) {
-                    if (err)  throw (err)
-                })
+            const sql2 = "SELECT * FROM booked_hours; INSERT INTO weeks (year, week) VALUES ('" + yearNow + "', '" + weekNow + "'), ('" + yearAfterWeek + "', '" + nextWeek + "') "
+            con.query(sql2, function(err, results) {
+                if(err) throw err
 
-                const sql3 = `
-                    SELECT * FROM booked_hours
-                    ORDER BY boxId ASC
-                `
-                con.query(sql3, function (err, results) {
-                    if (err) throw err
+                for(var x = 0; x < results[0].length; x++) {
+                    const sql3 = `
+                        INSERT INTO playing_hours (year, week, day, court, hour, valueID, booked_by, booked_time, note, start_id, length, isPaid) 
+                        VALUES (` + yearNow + `, ` + weekNow + `, ` + results[0][x].day + `, ` + results[0][x].court + `, ` + results[0][x].hour + `, ` + results[0][x].valueID + `, ` + results[0][x].booked_by + `, '` + results[0][x].booked_time + `', '` + results[0][x].note + `', ` + results[0][x].start_id + `, ` + results[0][x].length + `, 1)
+                    `
+                    con.query(sql3, function(err, results) {
+                        if(err) throw err
+                        
+                    })
+                }
 
-                    for(var x = 0; x < numOfBoxes; x++) {
-                        valuesBooked[x] = results[x].valueID
-                    }
-
-                    for(var i = 0; i < numOfBoxes; i++) {
-                        const sql4 = `
-                            INSERT INTO playing_hours (valueID, year, week, boxId)
-                            VALUES (`+ valuesBooked[i] +`, `+ yearNow +`, `+ weekNow +`, `+ (i+1) +`);
-                            INSERT INTO playing_hours (valueID, year, week, boxId)
-                            VALUES (`+ valuesBooked[i] +`, `+ yearNow +`, `+ weekNow +`, `+ (i+1+numOfBoxes) +`)
-                        `
-                        con.query(sql4, function (err, results) {
-                            if (err) throw err
-                        })
-                    }  
-                })
-            }
+                for(var x = 0; x < results[0].length; x++) {
+                    const sql3 = `
+                    INSERT INTO playing_hours (year, week, day, court, hour, valueID, booked_by, booked_time, note, start_id, length, isPaid)  
+                        VALUES (` + yearAfterWeek + `, ` + nextWeek + `, ` + results[0][x].day + `, ` + results[0][x].court + `, ` + results[0][x].hour + `, ` + results[0][x].valueID + `, ` + results[0][x].booked_by + `, '` + results[0][x].booked_time + `', '` + results[0][x].note + `', ` + results[0][x].start_id + `, ` + results[0][x].length + `, 1)
+                    `
+                    con.query(sql3, function(err, results) {
+                        if(err) throw err
+                        
+                    })
+                }
+            })
             
-            else {
-                const sql2 = "INSERT INTO weeks (year, week) VALUES ('" + yearNow + "', '" + weekNow + "'); UPDATE weeks SET isReset = 1 WHERE year = " + yearBeforeWeek + " AND week = " + lastWeek
-                con.query(sql2, function (err, results) {
-                    if (err)  throw (err)
-                })
+        } else if(results[1].length == 0) {
 
-                const sql3 = `
-                    SELECT * FROM playing_hours
-                    WHERE year = `+ yearBeforeWeek +` AND week = `+ lastWeek +`
-                    ORDER BY boxId ASC;
-                    SELECT * FROM booked_hours
-                    ORDER BY boxId ASC
-                `
-                con.query(sql3, function (err, results) {
-                    if (err) throw err
+            const sql2 = "SELECT * FROM booked_hours; INSERT INTO weeks (year, week) VALUES ('" + yearAfterWeek + "', '" + nextWeek + "') "
+            con.query(sql2, function(err, results) {
+                if(err) throw err
 
-                    for(var x = 0; x < numOfBoxes; x++) {
-                        valuesWeek2[x] = results[0][x+numOfBoxes].valueID
-                        valuesBooked[x] = results[1][x].valueID
-                    }
+                console.log(results[0])
+                for(var x = 0; x < results[0].length; x++) {
+                    const sql3 = `
+                        INSERT INTO playing_hours (year, week, day, court, hour, valueID, booked_by, booked_time, note, start_id, length, isPaid) 
+                        VALUES (` + yearAfterWeek + `, ` + nextWeek + `, ` + results[0][x].day + `, ` + results[0][x].court + `, ` + results[0][x].hour + `, ` + results[0][x].valueID + `, ` + results[0][x].booked_by + `, '` + results[0][x].booked_time + `', '` + results[0][x].note + `', ` + results[0][x].start_id + `, ` + results[0][x].length + `, 1)
+                    `
+                    console.log(sql3)
+                    con.query(sql3, function(err, results) {
+                        if(err) throw err
 
-                    for(var i = 0; i < numOfBoxes; i++) {
-                        const sql4 = `
-                            INSERT INTO playing_hours (valueID, year, week, boxId)
-                            VALUES (`+ valuesWeek2[i] +`, `+ yearNow +`, `+ weekNow +`, `+ (i+1) +`);
-                            INSERT INTO playing_hours (valueID, year, week, boxId)
-                            VALUES (`+ valuesBooked[i] +`, `+ yearNow +`, `+ weekNow +`, `+ (i+1+numOfBoxes) +`)
-                        `
-                        con.query(sql4, function (err, results) {
-                            if (err) throw err
-                        })
-                    }  
-                }) 
-            }
+                    })
+                }
+            })
         }
+
+        setTimeout(function() {
+            checkWeekValidity()
+        }, 1000*60*5)
     })
 
 }
@@ -497,3 +637,39 @@ const createDatabase = () => {
         })
     }  
 }
+
+
+/* CREATE TABLE `booked_hours` (
+  `id` int(11) NOT NULL,
+  `valueID` int(11) DEFAULT '0',
+  `day` int(11) NOT NULL,
+  `hour` int(11) NOT NULL,
+  `court` int(11) NOT NULL,
+  `boxId` int(11) DEFAULT NULL,
+  `booked_by` int(11) DEFAULT '1',
+  `booked_time` varchar(255) COLLATE utf8_czech_ci NOT NULL,
+  `note` varchar(255) COLLATE utf8_czech_ci NOT NULL,
+  `start_id` int(11) NOT NULL,
+  `length` int(11) NOT NULL,
+  `isPaid` tinyint(1) DEFAULT NULL
+) */
+
+/* CREATE TABLE `playing_hours` (
+    `id` int(11) NOT NULL,
+    `valueID` int(11) DEFAULT '0',
+    `year` int(11) DEFAULT NULL,
+    `week` int(11) DEFAULT NULL,
+    `day` int(11) NOT NULL,
+    `hour` int(11) NOT NULL,
+    `court` int(11) NOT NULL,
+    `boxId` int(11) DEFAULT NULL,
+    `booked_by` int(11) DEFAULT '1',
+    `booked_time` varchar(255) COLLATE utf8_czech_ci NOT NULL,
+    `note` varchar(255) COLLATE utf8_czech_ci NOT NULL,
+    `start_id` int(11) NOT NULL,
+    `length` int(11) NOT NULL,
+    `isPaid` tinyint(1) DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci; */
+
+
+  // chybi PRIMARY/FOREIGN KEYS, nejlepe export- otevrit sql file, zkopirovat thaaanx

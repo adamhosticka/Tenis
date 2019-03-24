@@ -19,15 +19,13 @@
         <div class="header">
             <img id="left_arrow" class="left_arrow" src="left_arrow.png">
             <img id="right_arrow" class="right_arrow" src="right_arrow.png">
-            <h1 id="h1_title">Správa týdenních hodin</h1> &nbsp;
-            <h1 id="h1_date"></h1>
-            <h1 id="h2_date" class="display_none"></h1>
+            <h1 id="h1_title">Správa týdenních hodin</h1>
         </div>
 
         <div class="content">
             <div id="swipe_layout_content" class="swipe_layout_content">
                 <div id="swipe_div1" class="swipe_layout_div">
-                    <table>
+                    <table id="first_thead" class="thead">
                         <tr class="tr_header">
                             <th class="border_bottom_none time_column">
                                 <div class="date_div">
@@ -66,6 +64,10 @@
                             <th>2</th>
                             <th>3</th>
                         </tr>
+                    </table>
+
+
+                    <table class="tbody">
                         <tr>
                             <th class="time_column">8:00 - 9:00</th>
                             <td></td>
@@ -405,7 +407,7 @@
                     </table>
                 </div>
                 <div id="swipe_div2" class="swipe_layout_div">
-                    <table>
+                    <table id="second_thead" class="thead">
                         <tr class="tr_header">
                             <th class="border_bottom_none time_column">
                                 <div class="date_div">
@@ -444,6 +446,9 @@
                             <th>2</th>
                             <th>3</th>
                         </tr>
+                    </table>
+
+                    <table class="tbody">
                         <tr>
                             <th class="time_column">8:00 - 9:00</th>
                             <td></td>
@@ -786,18 +791,12 @@
         </div>
 
         <div class="footer">
-            <button id="cancel_button">Zrušit</button>
-            <button id="save_button">Potvrdit</button>
             <button id="logout" class="display_block" onclick="location.href='/logout'">Odhlásit se</button>
             
             <div>
                 <a href="booked_hours">
                     <h2 id='footer_h2'>Klikněte pro spravování předplacených hodin</h2>
                 </a>
-            </div>
-
-            <div id="footer_message_div" class="footer_message_div">
-                <h2 id="footer_message"></h2>
             </div>
         </div>
 
@@ -829,7 +828,7 @@
             
             <span>
                 <h3>Do:</h3>
-                <select id="select_hour_end">
+                <select id="select_hour_end" onchange="setPrice()">
                     <option value="0">8:00</option>
                     <option value="1">9:00</option>
                     <option value="2">10:00</option>
@@ -853,6 +852,10 @@
                 <textarea id="note" maxlength="250" rows="5"></textarea>
             </span>
             
+            <span>
+                <h3>Cena: &nbsp;</h3><h3 id='price'></h3><h3>Kč</h3>
+            </span>
+
             <span>
                 <h3 id="warning">Pro zvolený čas je kurt již zarezervován!</h3>
             </span>
@@ -894,6 +897,5 @@
     </div>
     
     <script type="text/javascript" src="index.js"></script>
-    <!-- <script type="text/javascript" src="index_admin.js"></script> -->
 </body>
 </html>

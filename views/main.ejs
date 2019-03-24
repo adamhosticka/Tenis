@@ -21,15 +21,14 @@
         <div class="header">
             <img id="left_arrow" class="left_arrow" src="left_arrow.png">
             <img id="right_arrow" class="right_arrow" src="right_arrow.png">
-            <h1 id="h1_title">Tenis Klub Strakonice </h1> &nbsp;
-            <h1 id="h1_date"></h1>
-            <h1 id="h2_date" class="display_none"></h1>
+            <h1 id="h1_title">TK Strakonice</h1>
+            <p>+420720553919</p>
         </div>
 
         <div class="content">
             <div id="swipe_layout_content" class="swipe_layout_content">
                 <div id="swipe_div1" class="swipe_layout_div">
-                    <table>
+                    <table id="first_thead" class="thead">
                         <tr class="tr_header">
                             <th class="border_bottom_none time_column">
                                 <div class="date_div">
@@ -68,6 +67,10 @@
                             <th>2</th>
                             <th>3</th>
                         </tr>
+                    </table>
+
+
+                    <table class="tbody">
                         <tr>
                             <th class="time_column">8:00 - 9:00</th>
                             <td></td>
@@ -407,7 +410,7 @@
                     </table>
                 </div>
                 <div id="swipe_div2" class="swipe_layout_div">
-                    <table>
+                    <table id="second_thead" class="thead">
                         <tr class="tr_header">
                             <th class="border_bottom_none time_column">
                                 <div class="date_div">
@@ -446,6 +449,9 @@
                             <th>2</th>
                             <th>3</th>
                         </tr>
+                    </table>
+
+                    <table class="tbody">
                         <tr>
                             <th class="time_column">8:00 - 9:00</th>
                             <td></td>
@@ -788,15 +794,25 @@
         </div>
 
         <div class="footer">
-            <button id="cancel_button">Zrušit</button>
-            <button id="save_button">Potvrdit</button>
-            <h2 id='footer_h2'>+420720553919.</h2>
+            <div class="hint">
+                <img src="free_hour.png">
+                <p>Volna hodina</p>
+                <img src="booked_hour.png">
+                <p>Zamluvena hodina</p>
+            </div>
+
+
             <button id="login" onclick="location.href='/login'">Přihlásit se</button>
             <button id="logout" onclick="location.href='/logout'">Odhlásit se</button>
+        </div>
 
-            <div id="footer_message_div" class="footer_message_div">
-                <h2 id="footer_message"></h2>
-            </div>
+        <div style="display:none; position: absolute; height: 100%; width: 100%; z-index: 555; top: 0; left: 0; background: white; padding: 50px">
+            <form autocomplete="off" action="/action_page.php">
+                <div class="autocomplete" style="width:300px;">
+                    <input id="myInput" type="text" name="myCountry" placeholder="Country">
+                </div>
+                <input type="submit">
+            </form>
         </div>
 
         <div id="dark_background" class="dark_background"></div>
@@ -827,7 +843,7 @@
             
             <span>
                 <h3>Do:</h3>
-                <select id="select_hour_end">
+                <select id="select_hour_end" onchange="setPrice()">
                     <option value="0">8:00</option>
                     <option value="1">9:00</option>
                     <option value="2">10:00</option>
@@ -849,6 +865,10 @@
             <span>
                 <h3>Poznámka:</h3>
                 <textarea id="note" maxlength="250" rows="5"></textarea>
+            </span>
+            
+            <span>
+                <h3>Cena: &nbsp;</h3><h3 id='price'></h3><h3>Kč</h3>
             </span>
             
             <span>
