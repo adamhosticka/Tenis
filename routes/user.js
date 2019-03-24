@@ -6,7 +6,7 @@ var mysql = require('mysql')
 const saltRounds = 10;
 
 
-var db = mysql.createConnection({
+/* var db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
@@ -17,9 +17,9 @@ var db = mysql.createConnection({
 db.connect(function(err) {
   if (err) throw err
   console.log("Connected!");
-})
+}) */
 
-/* var db = mysql.createConnection({
+var db = mysql.createConnection({
   host: "eu-cdbr-west-02.cleardb.net",
   user: "bef10cec361e81",
   password: "a1790973",
@@ -30,7 +30,7 @@ db.connect(function(err) {
 db.connect(function(err) {
   if (err) throw err
   console.log("Connected!");
-}) */
+})
 
 function handleDisconnect(conn) {
   conn.on('error', function(err) {
