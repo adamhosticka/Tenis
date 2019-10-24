@@ -333,6 +333,8 @@ tr:hover th{
     display: none;
     width: max-content;
     height: max-content;
+    max-height: 100px;
+    max-width: 350px;
     background: white;
     padding: 30px 20px;
     border: 1px solid black;
